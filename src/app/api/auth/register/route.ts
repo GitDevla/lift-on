@@ -1,13 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
-import z from "zod";
 import { BadRequestError, errorMiddleware } from "@/lib/errorMiddleware";
 import { UserService } from "@/service/UserService";
-
-export const registerSchema = z.object({
-    email: z.email(),
-    username: z.string().min(3).max(20),
-    password: z.string().min(6),
-});
+import { registerSchema } from "@/validation/AuthSchema";
 
 async function post_handler(req: NextRequest) {
     const body = await req.json();

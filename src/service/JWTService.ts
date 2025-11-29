@@ -25,4 +25,13 @@ export default class JWTService {
             expiresIn: JWTService.expiration,
         } as SignOptions);
     }
+
+    static decodeToken(token: string): null | jwt.JwtPayload {
+        try {
+            const decoded = jwt.verify(token, JWTService.SECRET);
+            return decoded as jwt.JwtPayload;
+        } catch (_error) {
+            return null;
+        }
+    }
 }

@@ -1,13 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server";
-import z from "zod";
 import { BadRequestError, errorMiddleware, UnauthorizedError } from "@/lib/errorMiddleware";
 import AuthService from "@/service/AuthService";
 import JWTService from "@/service/JWTService";
-
-export const loginSchema = z.object({
-    username: z.string().min(3).max(20),
-    password: z.string().min(6),
-});
+import { loginSchema } from "@/validation/AuthSchema";
 
 async function post_handler(req: NextRequest) {
     const body = await req.json();
