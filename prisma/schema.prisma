@@ -1,0 +1,112 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  role      Role     @default(USER)
+  workouts  Workout[]
+}
+
+model MuscleGroup {
+  id                   Int                   @id @default(autoincrement())
+  name                 String                @unique
+  exerciseMuscleGroups ExerciseMuscleGroup[]
+}
+
+model Equipment {
+  id                 Int                 @id @default(autoincrement())
+  name               String              @unique
+  exerciseEquipments ExerciseEquipment[]
+}
+
+model Exercise {
+  id          Int    @id @default(autoincrement())
+  imageUrl   String?
+  name        String
+  description String
+
+  exerciseEquipments   ExerciseEquipment[]
+  exerciseMuscleGroups ExerciseMuscleGroup[]
+  workoutExercises     WorkoutExercise[]
+}
+
+model ExerciseEquipment {
+  exerciseId  Int
+  equipmentId Int
+
+  exercise  Exercise  @relation(fields: [exerciseId], references: [id])
+  equipment Equipment @relation(fields: [equipmentId], references: [id])
+
+  @@id([exerciseId, equipmentId])
+}
+
+model ExerciseMuscleGroup {
+  exerciseId    Int
+  muscleGroupId Int
+  isPrimary     Boolean @default(false)
+
+  exercise    Exercise    @relation(fields: [exerciseId], references: [id])
+  muscleGroup MuscleGroup @relation(fields: [muscleGroupId], references: [id])
+
+  @@id([exerciseId, muscleGroupId])
+}
+
+model Workout {
+  id               Int               @id @default(autoincrement())
+  userId           String
+  startedAt        DateTime          @default(now())
+  endedAt          DateTime?
+  user             User              @relation(fields: [userId], references: [id])
+  WorkoutExercises WorkoutExercise[]
+}
+
+model WorkoutExercise {
+  id         Int   @id @default(autoincrement())
+  workoutId  Int
+  exerciseId Int
+  order      Int
+  sets       Set[]
+
+  workout  Workout  @relation(fields: [workoutId], references: [id])
+  exercise Exercise @relation(fields: [exerciseId], references: [id])
+}
+
+enum SetType {
+  WARMUP
+  WORKING
+  FAILURE
+  DROP
+}
+
+model Set {
+  id                Int   @id @default(autoincrement())
+  workoutExerciseId Int
+  repetitions       Int
+  weight            Float
+  order             Int
+  type              SetType @default(WORKING)
+
+  workoutExercise WorkoutExercise @relation(fields: [workoutExerciseId], references: [id])
+}
