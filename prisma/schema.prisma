@@ -44,7 +44,7 @@ model Equipment {
 model Exercise {
   id          Int    @id @default(autoincrement())
   imageUrl   String?
-  name        String
+  name        String @unique
   description String
 
   exerciseEquipments   ExerciseEquipment[]

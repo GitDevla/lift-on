@@ -1,5 +1,7 @@
 import dotenv from "dotenv";
+import { Role } from "@/generated/prisma/enums";
 import prisma from "@/lib/prisma";
+import HashService from "@/service/HashService";
 
 dotenv.config();
 
@@ -29,10 +31,16 @@ async function main() {
         let muscles = exercise.targetMuscles;
         muscles = muscles.concat(exercise.secondaryMuscles);
 
-        const exerciseRecord = await prisma.exercise.create({
-            data: {
-                imageUrl: exercise.gifUrl,
+        const exerciseRecord = await prisma.exercise.upsert({
+            where: { name: exercise.name },
+            update: {
                 name: exercise.name,
+                imageUrl: exercise.gifUrl,
+                description: exercise.instructions.join("\n"),
+            },
+            create: {
+                name: exercise.name,
+                imageUrl: exercise.gifUrl,
                 description: exercise.instructions.join("\n"),
             },
         });
@@ -96,6 +104,19 @@ async function main() {
             ),
         );
     }
+
+    console.log("Seeding admin user");
+    const passwordHash = await HashService.hashPassword("admin123");
+    await prisma.user.upsert({
+        where: { email: "admin@example.com" },
+        update: {},
+        create: {
+            username: "admin",
+            email: "admin@example.com",
+            password: passwordHash,
+            role: Role.ADMIN,
+        },
+    });
 }
 
 main()
