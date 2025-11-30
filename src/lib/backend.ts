@@ -1,4 +1,5 @@
-import type { User } from "@/generated/prisma/client";
+import type { Exercise, User } from "@/generated/prisma/client";
+import type { ExerciseWithRelations } from "@/model/ExerciseModel";
 
 type BackendResponseOkResponse<T = any> = {
     ok: true;
@@ -140,5 +141,37 @@ export class Backend {
 
     static async getCurrentUser(): Promise<BackendResponse<{ user: User }>> {
         return Backend.GET<{ user: User }>("/api/me");
+    }
+
+    static async getExercises(filters?: {
+        nameQuery?: string;
+        muscleGroupIDs?: string[];
+        equipmentIDs?: string[];
+        page?: number;
+        pageSize?: number;
+    }): Promise<BackendResponse<ExerciseWithRelations[]>> {
+        const queryParams: Record<string, any> = {};
+        if (filters) {
+            if (filters.nameQuery) {
+                queryParams.nameQuery = filters.nameQuery;
+            }
+            if (filters.muscleGroupIDs && filters.muscleGroupIDs.length > 0) {
+                queryParams.muscleGroupIDs = filters.muscleGroupIDs.join(",");
+            }
+            if (filters.equipmentIDs) {
+                queryParams.equipmentIDs = filters.equipmentIDs.join(",");
+            }
+            if (filters.page) {
+                queryParams.page = filters.page;
+            }
+            if (filters.pageSize) {
+                queryParams.pageSize = filters.pageSize;
+            }
+        }
+        return Backend.GET<any>("/api/exercise", queryParams);
+    }
+
+    static async getMuscles(): Promise<BackendResponse<Array<{ id: number; name: string }>>> {
+        return Backend.GET<Array<{ id: number; name: string }>>("/api/muscles");
     }
 }

@@ -10,7 +10,7 @@ export class ExerciseModel {
             pageSize: number;
         }>,
     ) {
-        const res = await prisma.exercise.findMany(
+        let res = await prisma.exercise.findMany(
             {
                 where: {
                     name: {
@@ -32,7 +32,7 @@ export class ExerciseModel {
                     } : undefined,
 
                 },
-                skip: query.page && query.pageSize ? (query.page - 1) * query.pageSize : 0,
+                skip: query.page ? (query.page - 1) * (query.pageSize ?? 10) : 0,
                 take: query.pageSize ?? 10,
                 include: {
                     exerciseEquipments: {
@@ -48,6 +48,15 @@ export class ExerciseModel {
                 }
             }
         )
+
+        const seen = new Set();
+        res = res.filter(ex => {
+            const duplicate = seen.has(ex.id);
+            seen.add(ex.id);
+            return !duplicate;
+        });
+
+
         if (res.length > 0) {
             return res.filter(ex =>
                 query.muscleGroupIDs && query.muscleGroupIDs.length > 0 ?
@@ -57,7 +66,11 @@ export class ExerciseModel {
             );
         }
 
+
         return res;
     }
 
 }
+
+
+export type ExerciseWithRelations = Awaited<ReturnType<typeof ExerciseModel.getAllExercises>>[number];
