@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { set } from "zod";
 import type { User } from "@/generated/prisma/client";
 import { Backend } from "@/lib/backend";
 import { addToast } from "@/lib/heroui";
@@ -12,6 +13,7 @@ export default function AuthProvider({
     children: React.ReactNode;
 }) {
     const [user, setUser] = useState<null | User>(null);
+    const [loading, setLoading] = useState<boolean>(true);
 
     const login = async (username: string, password: string) => {
         const login = await Backend.login(username, password);
@@ -50,8 +52,10 @@ export default function AuthProvider({
                 .then((res) => {
                     if (res.ok) {
                         setUser(res.data.user);
+                        setLoading(false);
                     } else {
                         localStorage.removeItem("authToken");
+                        setLoading(false);
                     }
                 })
                 .catch(() => {
@@ -61,7 +65,7 @@ export default function AuthProvider({
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, register }}>
+        <AuthContext.Provider value={{ user, login, logout, register, loading }}>
             {children}
         </AuthContext.Provider>
     );

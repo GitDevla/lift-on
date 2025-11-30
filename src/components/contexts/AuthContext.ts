@@ -3,6 +3,7 @@ import type { User } from "@/generated/prisma/client";
 
 export const AuthContext = createContext<{
     user: User | null;
+    loading: boolean;
     login: (username: string, password: string) => Promise<void>;
     logout: () => Promise<void>;
     register: (
@@ -12,6 +13,7 @@ export const AuthContext = createContext<{
     ) => Promise<void>;
 }>({
     user: null,
+    loading: true,
     login: async () => {
         console.log("login function not implemented");
     },
