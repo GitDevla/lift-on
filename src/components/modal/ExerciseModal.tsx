@@ -18,7 +18,7 @@ export default function ExerciseModal({
 }) {
     const { isOpen, onOpen, onOpenChange } = disclosure;
     return (
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="lg">
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} scrollBehavior="inside" backdrop="blur">
             <ModalContent>
                 {(onClose) => (
                     <>

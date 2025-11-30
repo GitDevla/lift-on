@@ -1,8 +1,10 @@
+import { cn } from "clsx-for-tailwind";
 import { useContext } from "react";
 import { SetType } from "@/generated/prisma/enums";
 import {
     Button,
     Checkbox,
+    Image,
     Input,
     NumberInput,
     Select,
@@ -19,22 +21,37 @@ export default function TrackExerciseForm({ id }: { id: string }) {
     return (
         <div>
             <div key={exercise.id}>
-                <h3>{exercise.name}</h3>
+                <div className="flex items-center bg-content2 rounded-md p-2 px-10 gap-10">
+                    <Image
+                        src={exercise.imageUrl}
+                        alt={exercise.name}
+                        width={100}
+                        height={100}
+                    />
+                    <h3 className="capitalize text-lg">{exercise.name}</h3>
+                </div>
                 <div>
-                    <div className="grid grid-cols-9">
-                        <div>Type</div>
-                        <div className="col-span-2">Prev</div>
-                        <div className="col-span-2">Weight</div>
-                        <div className="col-span-2">Rep</div>
-                        {workoutContext.readonly ? null :
+                    <div className="grid grid-cols-9 font-bold gap-3 text-content4-foreground mb-2">
+                        <div className="text-center">Type</div>
+                        <div className="col-span-2 text-center">Prev</div>
+                        <div className="col-span-2 text-center">Weight</div>
+                        <div className="col-span-2 text-center">Rep</div>
+                        {workoutContext.readonly ? null : (
                             <>
-                                <div>Done</div>
-                                <div>Remove</div>
-                            </>}
+                                <div className="text-center">Done</div>
+                                <div className="text-center">Remove</div>
+                            </>
+                        )}
                     </div>
                     {exercise.sets.map((set) => (
-                        <div key={set.id} className="grid grid-cols-9">
-                            <div>
+                        <div
+                            key={set.id}
+                            className={cn(
+                                "grid grid-cols-9 gap-3 items-center justify-items-center p-2  rounded-md",
+                                set.done && "bg-green-500",
+                            )}
+                        >
+                            <div className="w-full">
                                 <Select
                                     label="Type"
                                     selectedKeys={[set.type]}
@@ -55,7 +72,7 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                                     ))}
                                 </Select>
                             </div>
-                            <div className="col-span-2">
+                            <div className="col-span-2 w-full">
                                 <Input
                                     label="Previous"
                                     placeholder="Previous"
@@ -63,7 +80,7 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                                     isDisabled
                                 />
                             </div>
-                            <div className="col-span-2">
+                            <div className="col-span-2 w-full">
                                 <NumberInput
                                     label="Weight"
                                     placeholder="Weight"
@@ -86,7 +103,7 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                                     isDisabled={workoutContext.readonly || set.done}
                                 />
                             </div>
-                            <div className="col-span-2">
+                            <div className="col-span-2 w-full">
                                 <NumberInput
                                     label="Reps"
                                     placeholder="Reps"
@@ -105,7 +122,7 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                                     isDisabled={workoutContext.readonly || set.done}
                                 />
                             </div>
-                            {workoutContext.readonly ? null :
+                            {workoutContext.readonly ? null : (
                                 <>
                                     <div>
                                         <Checkbox
@@ -133,18 +150,19 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                                             Remove
                                         </Button>
                                     </div>
-                                </>}
+                                </>
+                            )}
                         </div>
                     ))}
                 </div>
-                {workoutContext.readonly ? null :
+                {workoutContext.readonly ? null : (
                     <Button
                         onPress={() => workoutContext.addSet(exercise.id, 0, 0, "WORKING")}
                     >
                         Add Set
                     </Button>
-                }
+                )}
             </div>
-        </div>
+        </div >
     );
 }

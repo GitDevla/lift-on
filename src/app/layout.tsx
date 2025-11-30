@@ -18,7 +18,9 @@ export default function RootLayout({
       <body className={`antialiased`}>
         <Providers>
           <CustomNavbar />
-          <main className="min-h-screen">{children}</main>
+          <main className="min-h-screen px-4 py-8 md:py-12 lg:py-16 max-w-5xl mx-auto">
+            {children}
+          </main>
         </Providers>
       </body>
     </html>

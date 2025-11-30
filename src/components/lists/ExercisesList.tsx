@@ -81,8 +81,11 @@ export default function ExercisesList({
 
 
     return (
-        <div>
+        <div className="@container">
             <div>
+                <h1 className="text-2xl font-bold mb-4 text-center">Exercises</h1>
+            </div>
+            <div className="grid grid-cols-2 gap-4 mb-5">
                 <Input
                     label="Search Exercises"
                     value={nameQuery}
@@ -93,7 +96,7 @@ export default function ExercisesList({
                     onChange={setMuscleGroupFilter}
                 />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-4">
+            <div className="grid grid-cols-1 @lg:grid-cols-4 gap-4">
                 {shownExercises.map((exercise) => (
                     <ExerciseCard key={exercise.id} exercise={exercise} overrideOnPress={overrideOnPress} />
                 ))}

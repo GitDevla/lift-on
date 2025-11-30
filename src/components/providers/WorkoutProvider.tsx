@@ -1,4 +1,5 @@
 "use client";
+import { image } from "@heroui/react";
 import { use, useEffect, useState } from "react";
 import type { Exercise } from "@/generated/prisma/client";
 import type { SetType } from "@/generated/prisma/enums";
@@ -7,7 +8,7 @@ import { type Workout, WorkoutContext } from "../contexts/WorkoutContext";
 
 export default function WorkoutProvider({
     children,
-    id
+    id,
 }: {
     children: React.ReactNode;
     readonly?: boolean;
@@ -33,6 +34,7 @@ export default function WorkoutProvider({
                 ...currentWorkout,
                 endTime: new Date(),
             });
+            await Backend.updateWorkout(currentWorkout);
         }
     };
     const addExercise = async (exercise: Exercise) => {
@@ -43,6 +45,7 @@ export default function WorkoutProvider({
             const newExercise = {
                 id: exercise.id,
                 name: exercise.name,
+                imageUrl: exercise.imageUrl as string,
                 sets: [],
             };
             setCurrentWorkout({
@@ -154,7 +157,6 @@ export default function WorkoutProvider({
             });
         }
     }, [id]);
-
 
     return (
         <WorkoutContext.Provider

@@ -13,6 +13,7 @@ export interface Workout {
 export interface ExerciseInWorkout {
     id: number;
     name: string;
+    imageUrl: string;
     sets: SetInExercise[];
 }
 

@@ -31,7 +31,7 @@ export default function MuscleGroupSelector({
             onSelectionChange={(keys) => onChange(Array.from(keys) as string[])}
         >
             {muscleGroups.map((mg) => (
-                <SelectItem key={mg.id.toString()}>{mg.name}</SelectItem>
+                <SelectItem key={mg.id.toString()} className="capitalize">{mg.name}</SelectItem>
             ))}
         </Select>
     );
