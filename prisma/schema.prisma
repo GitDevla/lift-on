@@ -83,7 +83,6 @@ model Workout {
 }
 
 model WorkoutExercise {
-  id         Int   @id @default(autoincrement())
   workoutId  Int
   exerciseId Int
   order      Int
@@ -91,6 +90,8 @@ model WorkoutExercise {
 
   workout  Workout  @relation(fields: [workoutId], references: [id])
   exercise Exercise @relation(fields: [exerciseId], references: [id])
+
+  @@id([workoutId, exerciseId])
 }
 
 enum SetType {
@@ -101,12 +102,14 @@ enum SetType {
 }
 
 model Set {
-  id                Int   @id @default(autoincrement())
-  workoutExerciseId Int
-  repetitions       Int
-  weight            Float
-  order             Int
-  type              SetType @default(WORKING)
+  workoutExerciseWorkoutId Int
+  workoutExerciseExerciseId Int
+  repetitions      Int
+  weight           Float
+  order            Int
+  type             SetType          @default(WORKING)
+  done             Boolean          @default(false)
 
-  workoutExercise WorkoutExercise @relation(fields: [workoutExerciseId], references: [id])
+  workoutExercise WorkoutExercise @relation(fields: [workoutExerciseWorkoutId, workoutExerciseExerciseId], references: [workoutId, exerciseId])
+  @@id([workoutExerciseWorkoutId, workoutExerciseExerciseId, order])
 }
