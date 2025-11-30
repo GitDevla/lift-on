@@ -7,18 +7,22 @@ export interface Workout {
     id: string;
     startTime: Date;
     endTime: Date | null;
-    exercises: {
-        id: number;
-        name: string;
-        sets: {
-            id: string;
-            reps: number;
-            weight: number;
-            order: number;
-            type: SetType;
-            done: boolean;
-        }[];
-    }[];
+    exercises: ExerciseInWorkout[];
+}
+
+export interface ExerciseInWorkout {
+    id: number;
+    name: string;
+    sets: SetInExercise[];
+}
+
+export interface SetInExercise {
+    id: string;
+    reps: number;
+    weight: number;
+    order: number;
+    type: SetType;
+    done: boolean;
 }
 
 export const WorkoutContext = createContext<{
