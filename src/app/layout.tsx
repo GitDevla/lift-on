@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import CustomNavbar from "@/components/layout/Navbar";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
@@ -14,13 +15,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body
-        className={`antialiased`}
-      >
+      <body className={`antialiased`}>
         <Providers>
-          {children}
+          <CustomNavbar />
+          <main className="min-h-screen">{children}</main>
         </Providers>
       </body>
-    </html >
+    </html>
   );
 }
