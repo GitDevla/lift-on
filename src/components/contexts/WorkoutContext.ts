@@ -27,6 +27,7 @@ export interface SetInExercise {
 
 export const WorkoutContext = createContext<{
     currentWorkout: Workout | null;
+    readonly: boolean;
     startWorkout: () => Promise<void>;
     endWorkout: () => Promise<void>;
     addExercise: (exercise: Exercise) => Promise<void>;
@@ -46,6 +47,7 @@ export const WorkoutContext = createContext<{
     ) => Promise<void>;
 }>({
     currentWorkout: null,
+    readonly: false,
     startWorkout: async () => {
         console.log("startWorkout function not implemented");
     },

@@ -10,15 +10,18 @@ export default function WorkoutForm() {
 
     return (
         <div>
-            <h2>Workout Form</h2>
             {
-                JSON.stringify(workoutContext.currentWorkout)
+                !workoutContext.readonly && (
+                    <>
+                        <Button onPress={workoutContext.startWorkout}>Start Workout</Button>
+                        <Button onPress={workoutContext.endWorkout}>End Workout</Button>
+                        <SelectExerciseTrack />
+                    </>
+                )
             }
-            <Button onPress={workoutContext.startWorkout}>Start Workout</Button>
-            <Button onPress={workoutContext.endWorkout}>End Workout</Button>
+
             <p>Started: {workoutContext.currentWorkout?.startTime.toDateString()}</p>
             <p>Ended: {workoutContext.currentWorkout?.endTime?.toDateString() || "In Progress"}</p>
-            <SelectExerciseTrack />
             <div>
                 {workoutContext.currentWorkout?.exercises.map((exercise) => (
                     <TrackExerciseForm key={exercise.id} id={exercise.name} />

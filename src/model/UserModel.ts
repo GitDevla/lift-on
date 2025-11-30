@@ -28,4 +28,20 @@ export class UserModel {
             where: { id },
         });
     }
+
+    static async getWorkouts(userId: string, page: number, pageSize: number) {
+        return prisma.workout.findMany({
+            where: { userId },
+            skip: (page - 1) * pageSize,
+            take: pageSize,
+            include: {
+                WorkoutExercises: {
+                    include: {
+                        exercise: true,
+                        sets: true,
+                    },
+                },
+            },
+        });
+    }
 }

@@ -16,4 +16,12 @@ export class UserService {
         const hashPassword = await HashService.hashPassword(password);
         return UserModel.create(username, email, hashPassword);
     }
+
+    static async getUserWorkouts(
+        userId: string,
+        page: number,
+        pageSize: number,
+    ) {
+        return UserModel.getWorkouts(userId, page, pageSize);
+    }
 }

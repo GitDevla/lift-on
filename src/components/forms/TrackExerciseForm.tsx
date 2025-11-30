@@ -26,8 +26,11 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                         <div className="col-span-2">Prev</div>
                         <div className="col-span-2">Weight</div>
                         <div className="col-span-2">Rep</div>
-                        <div>Done</div>
-                        <div>Remove</div>
+                        {workoutContext.readonly ? null :
+                            <>
+                                <div>Done</div>
+                                <div>Remove</div>
+                            </>}
                     </div>
                     {exercise.sets.map((set) => (
                         <div key={set.id} className="grid grid-cols-9">
@@ -45,7 +48,7 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                                             set.done,
                                         )
                                     }
-                                    isDisabled={set.done}
+                                    isDisabled={workoutContext.readonly || set.done}
                                 >
                                     {Object.values(SetType).map((type) => (
                                         <SelectItem key={type}>{type}</SelectItem>
@@ -80,7 +83,7 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                                         style: "unit",
                                         unit: "kilogram",
                                     }}
-                                    isDisabled={set.done}
+                                    isDisabled={workoutContext.readonly || set.done}
                                 />
                             </div>
                             <div className="col-span-2">
@@ -99,43 +102,48 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                                             set.done,
                                         )
                                     }
-                                    isDisabled={set.done}
+                                    isDisabled={workoutContext.readonly || set.done}
                                 />
                             </div>
-                            <div>
-                                <Checkbox
-                                    isSelected={set.done}
-                                    onValueChange={(e) =>
-                                        workoutContext.updateSet(
-                                            exercise.id,
-                                            set.id,
-                                            set.weight,
-                                            set.reps,
-                                            set.type,
-                                            e,
-                                        )
-                                    }
-                                />
-                            </div>
-                            <div>
-                                <Button
-                                    color="danger"
-                                    onPress={() => {
-                                        // Remove set logic
-                                    }}
-                                    isDisabled={set.done}
-                                >
-                                    Remove
-                                </Button>
-                            </div>
+                            {workoutContext.readonly ? null :
+                                <>
+                                    <div>
+                                        <Checkbox
+                                            isSelected={set.done}
+                                            onValueChange={(e) =>
+                                                workoutContext.updateSet(
+                                                    exercise.id,
+                                                    set.id,
+                                                    set.weight,
+                                                    set.reps,
+                                                    set.type,
+                                                    e,
+                                                )
+                                            }
+                                        />
+                                    </div>
+                                    <div>
+                                        <Button
+                                            color="danger"
+                                            onPress={() => {
+                                                // Remove set logic
+                                            }}
+                                            isDisabled={set.done}
+                                        >
+                                            Remove
+                                        </Button>
+                                    </div>
+                                </>}
                         </div>
                     ))}
                 </div>
-                <Button
-                    onPress={() => workoutContext.addSet(exercise.id, 0, 0, "WORKING")}
-                >
-                    Add Set
-                </Button>
+                {workoutContext.readonly ? null :
+                    <Button
+                        onPress={() => workoutContext.addSet(exercise.id, 0, 0, "WORKING")}
+                    >
+                        Add Set
+                    </Button>
+                }
             </div>
         </div>
     );
