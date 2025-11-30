@@ -46,6 +46,8 @@ export const WorkoutContext = createContext<{
         type: SetType,
         done: boolean,
     ) => Promise<void>;
+    removeSet: (exerciseId: number, setId: string) => Promise<void>;
+    removeExercise: (exerciseId: number) => Promise<void>;
 }>({
     currentWorkout: null,
     readonly: false,
@@ -64,4 +66,10 @@ export const WorkoutContext = createContext<{
     updateSet: async () => {
         console.log("updateSet function not implemented");
     },
+    removeSet: async () => {
+        console.log("removeSet function not implemented");
+    },
+    removeExercise: async () => {
+        console.log("removeExercise function not implemented");
+    }
 });

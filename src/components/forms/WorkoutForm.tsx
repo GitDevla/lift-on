@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Button } from "@/lib/heroui";
 import Timer from "../atoms/Timer";
 import { WorkoutContext } from "../contexts/WorkoutContext";
+import ConfirmationModal from "../modal/ConfirmationModal";
 import SelectExerciseTrack from "../selector/SelectExerciseTrack";
 import TrackExerciseForm from "./TrackExerciseForm";
 
@@ -10,14 +11,22 @@ export default function WorkoutForm() {
 
     return (
         <div>
-
             {!workoutContext.readonly &&
                 (workoutContext.currentWorkout == null ? (
                     <Button onPress={workoutContext.startWorkout}>
                         Start New Workout
                     </Button>
                 ) : (
-                    <Button onPress={workoutContext.endWorkout}>End Workout</Button>
+                    <ConfirmationModal
+                        title="Confirm End Workout"
+                        message="You really wanna end this workout?"
+                        onConfirm={() => workoutContext.endWorkout()}
+                        trigger={(open) => (
+                            <Button color="danger" onPress={open}>
+                                End Workout
+                            </Button>
+                        )}
+                    ></ConfirmationModal>
                 ))}
             {workoutContext.currentWorkout && (
                 <div className="my-4">

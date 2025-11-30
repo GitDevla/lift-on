@@ -122,6 +122,38 @@ export default function WorkoutProvider({
         }
     };
 
+    const removeSet = async (exerciseId: number, setId: string) => {
+        console.log("Removing set:", exerciseId, setId);
+        if (currentWorkout) {
+            const updatedExercises = currentWorkout.exercises.map((exercise) => {
+                if (exercise.id === exerciseId) {
+                    const filteredSets = exercise.sets.filter((set) => set.id !== setId);
+                    return {
+                        ...exercise,
+                        sets: filteredSets,
+                    };
+                }
+                return exercise;
+            });
+            setCurrentWorkout({
+                ...currentWorkout,
+                exercises: updatedExercises,
+            });
+        }
+    }
+
+    const removeExercise = async (exerciseId: number) => {
+        if (currentWorkout) {
+            const filteredExercises = currentWorkout.exercises.filter(
+                (exercise) => exercise.id !== exerciseId,
+            );
+            setCurrentWorkout({
+                ...currentWorkout,
+                exercises: filteredExercises,
+            });
+        }
+    };
+
     useEffect(() => {
         const interval = setInterval(async () => {
             if (currentWorkout) {
@@ -168,6 +200,8 @@ export default function WorkoutProvider({
                 addExercise,
                 addSet,
                 updateSet,
+                removeSet,
+                removeExercise
             }}
         >
             {children}

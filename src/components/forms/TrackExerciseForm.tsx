@@ -11,6 +11,7 @@ import {
     SelectItem,
 } from "@/lib/heroui";
 import { WorkoutContext } from "../contexts/WorkoutContext";
+import ConfirmationModal from "../modal/ConfirmationModal";
 
 export default function TrackExerciseForm({ id }: { id: string }) {
     const workoutContext = useContext(WorkoutContext);
@@ -21,7 +22,7 @@ export default function TrackExerciseForm({ id }: { id: string }) {
     return (
         <div>
             <div key={exercise.id}>
-                <div className="flex items-center bg-content2 rounded-md p-2 px-10 gap-10">
+                <div className="flex items-center bg-content2 rounded-md p-2 px-10 gap-10 relative">
                     <Image
                         src={exercise.imageUrl}
                         alt={exercise.name}
@@ -29,6 +30,19 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                         height={100}
                     />
                     <h3 className="capitalize text-lg">{exercise.name}</h3>
+                    {workoutContext.readonly ? null : (
+                        <div className="top-0 absolute right-0 m-2 aspect-square">
+                            <ConfirmationModal title="Confirm Deletion" message="You really wanna delete this Exercise" onConfirm={() => workoutContext.removeExercise(exercise.id)}
+                                trigger={(open) => <Button
+                                    color="danger"
+                                    onPress={open}
+                                >
+                                    X
+                                </Button>}>
+
+                            </ConfirmationModal>
+                        </div>
+                    )}
                 </div>
                 <div>
                     <div className="grid grid-cols-9 font-bold gap-3 text-content4-foreground mb-2">
@@ -140,15 +154,16 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                                         />
                                     </div>
                                     <div>
-                                        <Button
-                                            color="danger"
-                                            onPress={() => {
-                                                // Remove set logic
-                                            }}
-                                            isDisabled={set.done}
-                                        >
-                                            Remove
-                                        </Button>
+                                        <ConfirmationModal title="Confirm Deletion" message="You really wanna delete this Set" onConfirm={() => workoutContext.removeSet(exercise.id, set.id)}
+                                            trigger={(open) => <Button
+                                                color="danger"
+                                                onPress={open}
+                                                isDisabled={set.done}
+                                            >
+                                                Remove
+                                            </Button>}>
+
+                                        </ConfirmationModal>
                                     </div>
                                 </>
                             )}
