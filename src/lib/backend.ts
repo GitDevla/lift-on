@@ -1,3 +1,4 @@
+import type { Workout } from "@/components/contexts/WorkoutContext";
 import type { Exercise, User } from "@/generated/prisma/client";
 import type { ExerciseWithRelations } from "@/model/ExerciseModel";
 
@@ -17,7 +18,7 @@ type BackendResponse<T = any> =
 
 export class Backend {
     private static async request<T = any>(
-        method: "GET" | "POST" | "PUT",
+        method: "GET" | "POST" | "PUT" | "PATCH",
         queryParamsOrBody?: Record<string, any> | any,
         path?: string,
     ): Promise<BackendResponse<T>> {
@@ -32,7 +33,7 @@ export class Backend {
 
         if (method === "GET" && queryParamsOrBody) {
             url += `?${new URLSearchParams(queryParamsOrBody as Record<string, string>).toString()}`;
-        } else if (method === "POST" || method === "PUT") {
+        } else if (method === "POST" || method === "PUT" || method === "PATCH") {
             options.headers = {
                 ...options.headers,
                 "Content-Type": "application/json",
@@ -81,6 +82,13 @@ export class Backend {
         body: any,
     ): Promise<BackendResponse<T>> {
         return Backend.request<T>("POST", body, path);
+    }
+
+    static async PATCH<T = any>(
+        path: string,
+        body: any,
+    ): Promise<BackendResponse<T>> {
+        return Backend.request<T>("PATCH", body, path);
     }
 
     static async PUT<T = any>(
@@ -171,7 +179,23 @@ export class Backend {
         return Backend.GET<any>("/api/exercise", queryParams);
     }
 
-    static async getMuscles(): Promise<BackendResponse<Array<{ id: number; name: string }>>> {
+    static async getMuscles(): Promise<
+        BackendResponse<Array<{ id: number; name: string }>>
+    > {
         return Backend.GET<Array<{ id: number; name: string }>>("/api/muscles");
+    }
+
+    static async startNewWorkout(): Promise<
+        BackendResponse<{
+            workout: { id: number; startedAt: string; endedAt: string | null };
+        }>
+    > {
+        return Backend.POST<{
+            workout: { id: number; startedAt: string; endedAt: string | null };
+        }>("/api/track", {});
+    }
+
+    static async updateWorkout(workout: Workout): Promise<BackendResponse<null>> {
+        return Backend.PATCH<null>("/api/track", { workout: workout });
     }
 }

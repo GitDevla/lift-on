@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import type { Exercise } from "@/generated/prisma/client";
 import type { SetType } from "@/generated/prisma/enums";
+import { Backend } from "@/lib/backend";
 import { type Workout, WorkoutContext } from "../contexts/WorkoutContext";
 
 export default function WorkoutProvider({
@@ -11,9 +12,13 @@ export default function WorkoutProvider({
 }) {
     const [currentWorkout, setCurrentWorkout] = useState<Workout | null>(null);
     const startWorkout = async () => {
+        const serverWorkout = await Backend.startNewWorkout();
+        if (!serverWorkout.ok) {
+            throw new Error("Failed to start new workout");
+        }
         setCurrentWorkout({
-            id: "workout1",
-            startTime: new Date(),
+            id: serverWorkout.data.workout.id,
+            startTime: new Date(serverWorkout.data.workout.startedAt),
             endTime: null,
             exercises: [],
         });
@@ -109,6 +114,16 @@ export default function WorkoutProvider({
             });
         }
     };
+
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            if (currentWorkout) {
+                await Backend.updateWorkout(currentWorkout);
+            }
+        }, 10000);
+
+        return () => clearInterval(interval);
+    }, [currentWorkout]);
 
     return (
         <WorkoutContext.Provider

@@ -4,7 +4,7 @@ import type { Exercise } from "@/generated/prisma/client";
 import type { SetType } from "@/generated/prisma/enums";
 
 export interface Workout {
-    id: string;
+    id: number;
     startTime: Date;
     endTime: Date | null;
     exercises: ExerciseInWorkout[];
