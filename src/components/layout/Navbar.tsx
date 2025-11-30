@@ -41,7 +41,7 @@ export default function CustomNavbar() {
                         <p className="font-semibold">{authContext.user?.username}</p>
                     </DropdownTrigger>
                     <DropdownMenu aria-label="Profile Actions" variant="flat">
-                        <DropdownItem key="track">Track</DropdownItem>
+                        <DropdownItem key="track" href="track">Track</DropdownItem>
                         <DropdownItem key="profile" href="/me">Profile</DropdownItem>
                         {authContext.user?.role === "ADMIN" ? (
                             <DropdownItem key="admin">Admin Panel</DropdownItem>
