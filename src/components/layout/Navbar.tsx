@@ -44,7 +44,7 @@ export default function CustomNavbar() {
                         <DropdownItem key="track" href="track">Track</DropdownItem>
                         <DropdownItem key="profile" href="/me">Profile</DropdownItem>
                         {authContext.user?.role === "ADMIN" ? (
-                            <DropdownItem key="admin">Admin Panel</DropdownItem>
+                            <DropdownItem key="admin" href="/admin">Admin Panel</DropdownItem>
                         ) : null}
                         <DropdownItem key="logout" color="danger" onPress={authContext.logout}>
                             Log Out
