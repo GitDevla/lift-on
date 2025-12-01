@@ -15,7 +15,7 @@ export default function WorkoutProvider({
     id?: number;
 }) {
     const [currentWorkout, setCurrentWorkout] = useState<Workout | null>(null);
-    const readonly = id !== undefined;
+    const [readonly, setReadonly] = useState<boolean>(id !== undefined);
     const startWorkout = async () => {
         const serverWorkout = await Backend.startNewWorkout();
         if (!serverWorkout.ok) {
@@ -35,6 +35,7 @@ export default function WorkoutProvider({
                 endTime: new Date(),
             });
             await Backend.updateWorkout(currentWorkout);
+            setReadonly(true);
         }
     };
     const addExercise = async (exercise: Exercise) => {
