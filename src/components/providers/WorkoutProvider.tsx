@@ -158,13 +158,13 @@ export default function WorkoutProvider({
 
     useEffect(() => {
         const interval = setInterval(async () => {
-            if (currentWorkout) {
+            if (currentWorkout && !readonly) {
                 await Backend.updateWorkout(currentWorkout);
             }
         }, 10000);
 
         return () => clearInterval(interval);
-    }, [currentWorkout]);
+    }, [currentWorkout, readonly]);
 
     useEffect(() => {
         if (data) {
