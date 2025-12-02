@@ -1,4 +1,5 @@
 import type { Workout } from "@/components/contexts/WorkoutContext";
+import { NotFoundError } from "@/lib/errorMiddleware";
 import { WorkoutModel } from "@/model/WorkoutModel";
 
 export class WorkoutService {
@@ -10,11 +11,18 @@ export class WorkoutService {
     static async updateWorkout(workout: Workout) {
         const workoutId = parseInt(workout.id, 10);
 
-        for (const exercise of workout.exercises) {
+        const dbWorkout = await WorkoutModel.getWorkoutById(workoutId);
+        if (!dbWorkout) {
+            throw new NotFoundError("Workout not found");
+        }
+
+        await WorkoutModel.clearWorkoutExercises(workoutId);
+
+        for (const [i, exercise] of workout.exercises.entries()) {
             const workoutExercise = await WorkoutModel.upsertExerciseInWorkout(
                 workoutId,
                 exercise.id,
-                0,
+                i,
             );
 
             for (const set of exercise.sets) {

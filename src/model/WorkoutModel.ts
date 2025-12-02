@@ -1,4 +1,3 @@
-import type { Workout } from "@/components/contexts/WorkoutContext";
 import type { SetType } from "@/generated/prisma/enums";
 import prisma from "@/lib/prisma";
 
@@ -80,6 +79,12 @@ export class WorkoutModel {
                     },
                 },
             },
+        });
+    }
+
+    static async clearWorkoutExercises(workoutId: number) {
+        return prisma.workoutExercise.deleteMany({
+            where: { workoutId },
         });
     }
 }
