@@ -213,4 +213,22 @@ export class Backend {
     ): Promise<BackendResponse<any>> {
         return Backend.GET<any>("/api/me/track", { page, pageSize });
     }
+
+    static async updateExercise(
+        exercise: ExerciseWithRelations,
+    ): Promise<BackendResponse<ExerciseWithRelations>> {
+        return Backend.PUT<ExerciseWithRelations>(
+            `/api/exercise/${exercise.id}`,
+            exercise,
+        );
+    }
+
+    static async createExercise(
+        exercise: ExerciseWithRelations,
+    ): Promise<BackendResponse<ExerciseWithRelations>> {
+        return Backend.POST<ExerciseWithRelations>(
+            `/api/exercise`,
+            exercise,
+        );
+    }
 }

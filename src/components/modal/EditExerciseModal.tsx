@@ -1,5 +1,6 @@
 import { use, useContext, useEffect, useState } from "react";
 import type { Exercise } from "@/generated/prisma/client";
+import { Backend } from "@/lib/backend";
 import {
     Button,
     Form,
@@ -34,14 +35,15 @@ export default function EditExerciseModal({
     //     };
     // }
 
-    const [exerciseState, setExerciseState] = useState<ExerciseWithRelations | null>(null);
+    const [exerciseState, setExerciseState] =
+        useState<ExerciseWithRelations | null>(null);
 
     useEffect(() => {
         if (exercise) {
             setExerciseState(exercise);
         } else {
             setExerciseState({
-                id: 0,
+                id: -1,
                 name: "",
                 description: "",
                 imageUrl: "",
@@ -55,6 +57,26 @@ export default function EditExerciseModal({
         return null;
     }
 
+    const handleSubmit = async () => {
+        console.log("Submitting exercise:", exerciseState);
+        if (exerciseState.id === -1) {
+            // New exercise
+            const res = await Backend.createExercise(exerciseState);
+            if (res.ok) {
+                onOpenChange();
+            } else {
+                console.error("Failed to create exercise:", res.error);
+            }
+            return;
+        }
+        const res = await Backend.updateExercise(exerciseState);
+        if (res.ok) {
+            onOpenChange();
+        } else {
+            console.error("Failed to update exercise:", res.error);
+        }
+    };
+
     return (
         <Modal
             isOpen={isOpen}
@@ -66,7 +88,8 @@ export default function EditExerciseModal({
             <ModalContent>
                 <ModalHeader>Add New Exercise</ModalHeader>
                 <ModalBody>
-                    <Form>
+                    <Form
+                    >
                         <Input
                             type="text"
                             label="Exercise Name"
@@ -90,10 +113,10 @@ export default function EditExerciseModal({
                                 reader.onload = () =>
                                     setExerciseState((s) => {
                                         if (!s) return s; // should not happen
-                                        return ({
+                                        return {
                                             ...s,
                                             imageUrl: String(reader.result),
-                                        });
+                                        };
                                     });
                                 reader.readAsDataURL(f);
                             }}
@@ -107,27 +130,31 @@ export default function EditExerciseModal({
                                 setExerciseState({ ...exerciseState, description: value })
                             }
                         />
-                        <MuscleGroupSelector value={exerciseState.exerciseMuscleGroups.map(mg => mg.muscleGroupId.toString())} onChange={(newValue) => {
-                            const updatedMuscleGroups = newValue.map(id => ({
-                                exerciseId: exerciseState.id,
-                                muscleGroupId: parseInt(id),
-                                isPrimary: false,
-                                muscleGroup: { id: parseInt(id), name: '' },
-                            }));
-                            setExerciseState({
-                                ...exerciseState,
-                                exerciseMuscleGroups: updatedMuscleGroups,
-                            });
-                        }} />
+                        <MuscleGroupSelector
+                            value={exerciseState.exerciseMuscleGroups.map((mg) =>
+                                mg.muscleGroupId.toString(),
+                            )}
+                            onChange={(newValue) => {
+                                const updatedMuscleGroups = newValue.map((id) => ({
+                                    exerciseId: exerciseState.id,
+                                    muscleGroupId: parseInt(id),
+                                    isPrimary: false,
+                                    muscleGroup: { id: parseInt(id), name: "" },
+                                }));
+                                setExerciseState({
+                                    ...exerciseState,
+                                    exerciseMuscleGroups: updatedMuscleGroups,
+                                });
+                            }}
+                        />
                     </Form>
                 </ModalBody>
                 <ModalFooter>
                     <Button onPress={onOpenChange}>Close</Button>
                     <Button
                         color="primary"
-                        onPress={() => {
-                            onOpenChange();
-                        }}
+                        type="submit"
+                        onPress={handleSubmit}
                     >
                         Save Changes
                     </Button>
