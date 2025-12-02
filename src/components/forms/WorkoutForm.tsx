@@ -19,7 +19,7 @@ export default function WorkoutForm() {
                 ) : (
                     <ConfirmationModal
                         title="Confirm End Workout"
-                        message="You really wanna end this workout?"
+                        message="You really wanna end this workout? This action will set all incomplete sets as done."
                         onConfirm={() => workoutContext.endWorkout()}
                         trigger={(open) => (
                             <Button color="danger" onPress={open}>

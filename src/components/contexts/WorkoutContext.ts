@@ -48,6 +48,8 @@ export const WorkoutContext = createContext<{
     ) => Promise<void>;
     removeSet: (exerciseId: number, setId: string) => Promise<void>;
     removeExercise: (exerciseId: number) => Promise<void>;
+    moveExerciseUp: (exerciseId: number) => Promise<void>;
+    moveExerciseDown: (exerciseId: number) => Promise<void>;
 }>({
     currentWorkout: null,
     readonly: false,
@@ -71,5 +73,11 @@ export const WorkoutContext = createContext<{
     },
     removeExercise: async () => {
         console.log("removeExercise function not implemented");
-    }
+    },
+    moveExerciseUp: async () => {
+        console.log("moveExerciseUp function not implemented");
+    },
+    moveExerciseDown: async () => {
+        console.log("moveExerciseDown function not implemented");
+    },
 });

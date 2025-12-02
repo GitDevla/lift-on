@@ -8,7 +8,7 @@ import { type Workout, WorkoutContext } from "../contexts/WorkoutContext";
 
 export default function WorkoutProvider({
     children,
-    data
+    data,
 }: {
     children: React.ReactNode;
     readonly?: boolean;
@@ -33,7 +33,14 @@ export default function WorkoutProvider({
             const updatedWorkout = {
                 ...currentWorkout,
                 endTime: new Date(),
-            }
+            };
+            currentWorkout.exercises.forEach((exercise, exIndex) => {
+                exercise.sets.forEach((set, setIndex) => {
+                    if (!set.done) {
+                        updatedWorkout.exercises[exIndex].sets[setIndex].done = true;
+                    }
+                });
+            });
             setCurrentWorkout(updatedWorkout);
             await Backend.updateWorkout(updatedWorkout);
             setReadonly(true);
@@ -142,7 +149,7 @@ export default function WorkoutProvider({
                 exercises: updatedExercises,
             });
         }
-    }
+    };
 
     const removeExercise = async (exerciseId: number) => {
         if (currentWorkout) {
@@ -153,6 +160,44 @@ export default function WorkoutProvider({
                 ...currentWorkout,
                 exercises: filteredExercises,
             });
+        }
+    };
+
+    const moveExerciseUp = async (exerciseId: number) => {
+        if (currentWorkout) {
+            const index = currentWorkout.exercises.findIndex(
+                (ex) => ex.id === exerciseId,
+            );
+            if (index > 0) {
+                const newExercises = [...currentWorkout.exercises];
+                [newExercises[index - 1], newExercises[index]] = [
+                    newExercises[index],
+                    newExercises[index - 1],
+                ];
+                setCurrentWorkout({
+                    ...currentWorkout,
+                    exercises: newExercises,
+                });
+            }
+        }
+    };
+
+    const moveExerciseDown = async (exerciseId: number) => {
+        if (currentWorkout) {
+            const index = currentWorkout.exercises.findIndex(
+                (ex) => ex.id === exerciseId,
+            );
+            if (index < currentWorkout.exercises.length - 1) {
+                const newExercises = [...currentWorkout.exercises];
+                [newExercises[index + 1], newExercises[index]] = [
+                    newExercises[index],
+                    newExercises[index + 1],
+                ];
+                setCurrentWorkout({
+                    ...currentWorkout,
+                    exercises: newExercises,
+                });
+            }
         }
     };
 
@@ -185,7 +230,9 @@ export default function WorkoutProvider({
                 addSet,
                 updateSet,
                 removeSet,
-                removeExercise
+                removeExercise,
+                moveExerciseUp,
+                moveExerciseDown,
             }}
         >
             {children}

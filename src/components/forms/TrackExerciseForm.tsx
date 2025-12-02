@@ -4,6 +4,10 @@ import { SetType } from "@/generated/prisma/enums";
 import {
     Button,
     Checkbox,
+    Dropdown,
+    DropdownItem,
+    DropdownMenu,
+    DropdownTrigger,
     Image,
     Input,
     NumberInput,
@@ -32,15 +36,28 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                     <h3 className="capitalize text-lg">{exercise.name}</h3>
                     {workoutContext.readonly ? null : (
                         <div className="top-0 absolute right-0 m-2 aspect-square">
-                            <ConfirmationModal title="Confirm Deletion" message="You really wanna delete this Exercise" onConfirm={() => workoutContext.removeExercise(exercise.id)}
-                                trigger={(open) => <Button
-                                    color="danger"
-                                    onPress={open}
-                                >
-                                    X
-                                </Button>}>
-
-                            </ConfirmationModal>
+                            <Dropdown>
+                                <DropdownTrigger>
+                                    <Button variant="bordered">Open Menu</Button>
+                                </DropdownTrigger>
+                                <DropdownMenu>
+                                    <DropdownItem key="move_up" onPress={() =>
+                                        workoutContext.moveExerciseUp(exercise.id)
+                                    }>Move Up</DropdownItem>
+                                    <DropdownItem key="move_down"
+                                        onPress={() =>
+                                            workoutContext.moveExerciseDown(exercise.id)
+                                        }
+                                    >Move Down</DropdownItem>
+                                    <DropdownItem key="delete" className="text-danger" color="danger"
+                                        onPress={() => (
+                                            workoutContext.removeExercise(exercise.id)
+                                        )}
+                                    >
+                                        Delete Exercise
+                                    </DropdownItem>
+                                </DropdownMenu>
+                            </Dropdown>
                         </div>
                     )}
                 </div>
