@@ -30,11 +30,12 @@ export default function WorkoutProvider({
     };
     const endWorkout = async () => {
         if (currentWorkout) {
-            setCurrentWorkout({
+            const updatedWorkout = {
                 ...currentWorkout,
                 endTime: new Date(),
-            });
-            await Backend.updateWorkout(currentWorkout);
+            }
+            setCurrentWorkout(updatedWorkout);
+            await Backend.updateWorkout(updatedWorkout);
             setReadonly(true);
         }
     };
