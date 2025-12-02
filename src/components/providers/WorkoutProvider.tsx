@@ -8,14 +8,14 @@ import { type Workout, WorkoutContext } from "../contexts/WorkoutContext";
 
 export default function WorkoutProvider({
     children,
-    id,
+    data
 }: {
     children: React.ReactNode;
     readonly?: boolean;
-    id?: number;
+    data?: Workout;
 }) {
     const [currentWorkout, setCurrentWorkout] = useState<Workout | null>(null);
-    const [readonly, setReadonly] = useState<boolean>(id !== undefined);
+    const [readonly, setReadonly] = useState<boolean>(data !== undefined);
     const startWorkout = async () => {
         const serverWorkout = await Backend.startNewWorkout();
         if (!serverWorkout.ok) {
@@ -166,30 +166,12 @@ export default function WorkoutProvider({
     }, [currentWorkout]);
 
     useEffect(() => {
-        if (id) {
-            Backend.getWorkoutById(id).then((response) => {
-                if (response.ok) {
-                    setCurrentWorkout({
-                        id: response.data.workout.id,
-                        startTime: new Date(response.data.workout.startedAt),
-                        endTime: new Date(response.data.workout.endedAt),
-                        exercises: response.data.workout.WorkoutExercises.map((we) => ({
-                            id: we.exercise.id,
-                            name: we.exercise.name,
-                            sets: we.sets.map((s) => ({
-                                id: `set${s.order}`,
-                                reps: s.repetitions,
-                                weight: s.weight,
-                                order: s.order,
-                                type: s.type,
-                                done: s.done,
-                            })),
-                        })),
-                    });
-                }
-            });
+        if (data) {
+            setCurrentWorkout(data);
+            console.log(data);
+            setReadonly(true);
         }
-    }, [id]);
+    }, [data]);
 
     return (
         <WorkoutContext.Provider

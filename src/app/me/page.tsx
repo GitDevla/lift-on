@@ -3,9 +3,9 @@ import { div } from "framer-motion/client";
 import { redirect } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "@/components/contexts/AuthContext";
+import type { Workout } from "@/components/contexts/WorkoutContext";
 import WorkoutForm from "@/components/forms/WorkoutForm";
 import WorkoutProvider from "@/components/providers/WorkoutProvider";
-import type { Workout } from "@/generated/prisma/client";
 import { Backend } from "@/lib/backend";
 
 export default function MePage() {
@@ -46,7 +46,7 @@ export default function MePage() {
                             <ul className="mt-4 space-y-4">
                                 {workouts.map((workout) => (
                                     <div key={workout.id}>
-                                        <WorkoutProvider id={workout.id}>
+                                        <WorkoutProvider data={workout}>
                                             <WorkoutForm />
                                         </WorkoutProvider>
                                     </div>

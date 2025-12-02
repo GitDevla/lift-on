@@ -30,9 +30,6 @@ export default function WorkoutForm() {
                 ))}
             {workoutContext.currentWorkout && (
                 <div className="my-4">
-                    <h2 className="text-xl font-semibold mb-2">
-                        Current Workout: {workoutContext.currentWorkout.name}
-                    </h2>
                     <Timer
                         startTime={workoutContext.currentWorkout.startTime}
                         endTime={workoutContext.currentWorkout.endTime}
