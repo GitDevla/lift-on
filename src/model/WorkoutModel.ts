@@ -87,4 +87,10 @@ export class WorkoutModel {
             where: { workoutId },
         });
     }
+
+    static async deleteWorkout(workoutId: number) {
+        return prisma.workout.delete({
+            where: { id: workoutId },
+        });
+    }
 }

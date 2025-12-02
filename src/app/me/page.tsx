@@ -5,8 +5,10 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "@/components/contexts/AuthContext";
 import type { Workout } from "@/components/contexts/WorkoutContext";
 import WorkoutForm from "@/components/forms/WorkoutForm";
+import CollapsedWorkoutModal from "@/components/modal/CollapsedWorkoutModal";
 import WorkoutProvider from "@/components/providers/WorkoutProvider";
 import { Backend } from "@/lib/backend";
+import { Button } from "@/lib/heroui";
 
 export default function MePage() {
     const authContext = useContext(AuthContext);
@@ -46,9 +48,32 @@ export default function MePage() {
                             <ul className="mt-4 space-y-4">
                                 {workouts.map((workout) => (
                                     <div key={workout.id}>
-                                        <WorkoutProvider data={workout}>
+                                        {/* <WorkoutProvider data={workout}>
                                             <WorkoutForm />
-                                        </WorkoutProvider>
+                                        </WorkoutProvider> */}
+                                        <CollapsedWorkoutModal
+                                            workout={workout}
+                                            trigger={(onOpen) => (
+                                                <div
+                                                    className="p-4 border rounded-lg shadow-sm hover:shadow-md cursor-pointer"
+                                                    onClick={onOpen}
+                                                >
+                                                    <h3 className="text-lg font-semibold">
+                                                        Workout on{" "}
+                                                        {new Date(workout.startTime).toLocaleDateString()}
+                                                    </h3>
+                                                    <p>
+                                                        {workout.exercises.length} exercise
+                                                        {workout.exercises.length !== 1 ? "s" : ""}
+                                                    </p>
+                                                    <Button
+                                                        onPress={() => {
+                                                            Backend.deleteWorkout(workout.id);
+                                                        }}
+                                                    >Delete</Button>
+                                                </div>
+                                            )}
+                                        />
                                     </div>
                                 ))}
                             </ul>

@@ -38,4 +38,13 @@ export class WorkoutService {
             }
         }
     }
+
+    static async deleteWorkout(workoutId: number) {
+        const dbWorkout = await WorkoutModel.getWorkoutById(workoutId);
+        if (!dbWorkout) {
+            throw new NotFoundError("Workout not found");
+        }
+
+        await WorkoutModel.deleteWorkout(workoutId);
+    }
 }

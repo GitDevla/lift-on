@@ -18,7 +18,7 @@ type BackendResponse<T = any> =
 
 export class Backend {
     private static async request<T = any>(
-        method: "GET" | "POST" | "PUT" | "PATCH",
+        method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE",
         queryParamsOrBody?: Record<string, any> | any,
         path?: string,
     ): Promise<BackendResponse<T>> {
@@ -31,7 +31,7 @@ export class Backend {
             },
         };
 
-        if (method === "GET" && queryParamsOrBody) {
+        if ((method === "GET" || method === "DELETE") && queryParamsOrBody) {
             url += `?${new URLSearchParams(queryParamsOrBody as Record<string, string>).toString()}`;
         } else if (method === "POST" || method === "PUT" || method === "PATCH") {
             options.headers = {
@@ -96,6 +96,13 @@ export class Backend {
         body: any,
     ): Promise<BackendResponse<T>> {
         return Backend.request<T>("PUT", body, path);
+    }
+
+    static async DELETE<T = any>(
+        path: string,
+        queryParams?: Record<string, any>,
+    ): Promise<BackendResponse<T>> {
+        return Backend.request<T>("DELETE", queryParams, path);
     }
 
     static async GETPROMISE<T = any>(
@@ -230,5 +237,11 @@ export class Backend {
             `/api/exercise`,
             exercise,
         );
+    }
+
+    static async deleteWorkout(workoutId: number): Promise<BackendResponse<null>> {
+        const queryParams: Record<string, any> = {};
+        queryParams.workoutID = workoutId;
+        return Backend.DELETE<null>("/api/track", queryParams);
     }
 }

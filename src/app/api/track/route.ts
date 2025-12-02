@@ -57,6 +57,29 @@ async function get_handler(req: NextRequest) {
     });
 }
 
+async function delete_handler(req: NextRequest) {
+    const user = await getUser(req);
+
+    if (!user) {
+        throw new UnauthorizedError("Invalid or missing authentication token.");
+    }
+
+    const workoutID = req.nextUrl.searchParams.get("workoutID");
+    if (!workoutID) {
+        return new Response(
+            JSON.stringify({ error: "Missing workoutID parameter." }),
+            {
+                status: 400,
+                headers: { "Content-Type": "application/json" },
+            },
+        );
+    }
+
+    await WorkoutService.deleteWorkout(parseInt(workoutID, 10));
+    return new Response(null, { status: 204 });
+}
+
 export const POST = errorMiddleware(post_handler);
 export const PATCH = errorMiddleware(patch_handler);
 export const GET = errorMiddleware(get_handler);
+export const DELETE = errorMiddleware(delete_handler);
