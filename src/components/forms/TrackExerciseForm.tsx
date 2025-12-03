@@ -62,7 +62,9 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                     )}
                 </div>
                 <div>
-                    <div className="grid grid-cols-9 font-bold gap-3 text-content4-foreground mb-2">
+                    <div className={cn("grid font-bold gap-3 text-content4-foreground mb-2",
+                        workoutContext.readonly ? "grid-cols-7" : "grid-cols-9"
+                    )}>
                         <div className="text-center">Type</div>
                         <div className="col-span-2 text-center">Prev</div>
                         <div className="col-span-2 text-center">Weight</div>
@@ -78,8 +80,9 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                         <div
                             key={set.id}
                             className={cn(
-                                "grid grid-cols-9 gap-3 items-center justify-items-center p-2  rounded-md",
+                                "grid gap-3 items-center justify-items-center p-2  rounded-md",
                                 set.done && "bg-green-500",
+                                workoutContext.readonly ? "grid-cols-7" : "grid-cols-9"
                             )}
                         >
                             <div className="w-full">
