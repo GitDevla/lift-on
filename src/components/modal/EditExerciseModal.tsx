@@ -14,6 +14,7 @@ import {
     Textarea,
 } from "@/lib/heroui";
 import type { ExerciseWithRelations } from "@/model/ExerciseModel";
+import EquipmentGroupSelector from "../selector/EquipmentGroupSelector";
 import MuscleGroupSelector from "../selector/MuscleGroupSelector";
 
 export default function EditExerciseModal({
@@ -88,8 +89,7 @@ export default function EditExerciseModal({
             <ModalContent>
                 <ModalHeader>Add New Exercise</ModalHeader>
                 <ModalBody>
-                    <Form
-                    >
+                    <Form>
                         <Input
                             type="text"
                             label="Exercise Name"
@@ -147,15 +147,27 @@ export default function EditExerciseModal({
                                 });
                             }}
                         />
+                        <EquipmentGroupSelector
+                            value={exerciseState.exerciseEquipments.map((eq) =>
+                                eq.equipmentId.toString(),
+                            )}
+                            onChange={(newValue) => {
+                                const updatedEquipments = newValue.map((id) => ({
+                                    exerciseId: exerciseState.id,
+                                    equipmentId: parseInt(id),
+                                    equipment: { id: parseInt(id), name: "" },
+                                }));
+                                setExerciseState({
+                                    ...exerciseState,
+                                    exerciseEquipments: updatedEquipments,
+                                });
+                            }}
+                        />
                     </Form>
                 </ModalBody>
                 <ModalFooter>
                     <Button onPress={onOpenChange}>Close</Button>
-                    <Button
-                        color="primary"
-                        type="submit"
-                        onPress={handleSubmit}
-                    >
+                    <Button color="primary" type="submit" onPress={handleSubmit}>
                         Save Changes
                     </Button>
                 </ModalFooter>
