@@ -17,7 +17,7 @@ export default function SelectExerciseTrack() {
     return (
         <div>
             <Button onPress={onOpen} color="success">Add Exercise</Button>
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} scrollBehavior="inside" backdrop="blur">
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} scrollBehavior="inside" backdrop="blur" size="lg">
                 <ModalContent>
                     <ModalHeader>Add New Exercise</ModalHeader>
                     <ModalBody>

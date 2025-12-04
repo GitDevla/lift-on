@@ -2,35 +2,34 @@ import { useEffect, useState } from "react";
 import { Backend } from "@/lib/backend";
 import { Select, SelectItem } from "@/lib/heroui";
 
-export default function MuscleGroupSelector({
+export default function EquipmentGroupSelector({
     value,
     onChange,
 }: {
     value: string[];
     onChange: (newValue: string[]) => void;
 }) {
-    const [muscleGroups, setMuscleGroups] = useState<
+    const [equipmentGroups, setEquipmentGroups] = useState<
         Array<{ id: number; name: string }>
     >([]);
 
     useEffect(() => {
-        Backend.getMuscles().then((res) => {
+        Backend.getEquipment().then((res) => {
             if (res.ok) {
-                setMuscleGroups(res.data);
+                setEquipmentGroups(res.data);
             } else {
-                console.error("Failed to fetch muscle groups:", res.error);
+                console.error("Failed to fetch equipment groups:", res.error);
             }
         });
     }, []);
     return (
         <Select
-            label="Muscles"
-            selectionMode="multiple"
-            placeholder="Filter by Muscles"
+            label="Equipment"
+            placeholder="Filter by Equipments"
             selectedKeys={value}
             onSelectionChange={(keys) => onChange(Array.from(keys) as string[])}
         >
-            {muscleGroups.map((mg) => (
+            {equipmentGroups.map((mg) => (
                 <SelectItem key={mg.id.toString()} className="capitalize">{mg.name}</SelectItem>
             ))}
         </Select>

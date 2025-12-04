@@ -6,6 +6,8 @@ import MuscleGroupSelector from "@/components/selector/MuscleGroupSelector";
 import { Backend } from "@/lib/backend";
 import { Input } from "@/lib/heroui";
 import type { ExerciseWithRelations } from "@/model/ExerciseModel";
+import ExecuteWhenOnScreen from "../atoms/ExecuteWhenOnScreen";
+import EquipmentGroupSelector from "../selector/EquipmentGroupSelector";
 
 export default function ExercisesList({
     overrideOnPress,
@@ -17,6 +19,7 @@ export default function ExercisesList({
     >([]);
     const [nameQuery, setNameQuery] = useState<string>("");
     const [muscleGroupFilter, setMuscleGroupFilter] = useState<string[]>([]);
+    const [equipmentGroupFilter, setEquipmentGroupFilter] = useState<string[]>([]);
     const page = useRef<number>(1);
     const isLoading = useRef<boolean>(false);
     const hasMore = useRef<boolean>(true);
@@ -28,6 +31,8 @@ export default function ExercisesList({
             muscleGroupIDs: muscleGroupFilter,
             nameQuery: nameQuery,
             page: page.current,
+            equipmentIDs: equipmentGroupFilter,
+            pageSize: 16,
         }).then((res) => {
             if (res.ok) {
                 if (res.data.length === 0) {
@@ -57,6 +62,8 @@ export default function ExercisesList({
             muscleGroupIDs: muscleGroupFilter,
             nameQuery: nameQuery,
             page: page.current,
+            equipmentIDs: equipmentGroupFilter,
+            pageSize: 16,
         }).then((res) => {
             if (res.ok) {
                 setShownExercises((prev) => [...prev, ...res.data]);
@@ -65,7 +72,7 @@ export default function ExercisesList({
             }
             isLoading.current = false;
         });
-    }, [muscleGroupFilter, nameQuery]);
+    }, [muscleGroupFilter, nameQuery, equipmentGroupFilter]);
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
@@ -73,45 +80,38 @@ export default function ExercisesList({
             freshSearch();
         }, 300);
         return () => clearTimeout(timeout);
-    }, [nameQuery, muscleGroupFilter]);
+    }, [nameQuery, muscleGroupFilter, equipmentGroupFilter]);
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
         freshSearch();
     }, []);
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
-        const handleScroll = () => {
-            if (
-                window.innerHeight + window.scrollY >=
-                document.body.offsetHeight - 500
-            ) {
-                loadMore();
-            }
-        };
-
-        window.addEventListener("scroll", handleScroll);
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-        };
-    }, [loadMore]);
 
     return (
         <div className="@container">
             <div>
                 <h1 className="text-2xl font-bold mb-4 text-center">Exercises</h1>
             </div>
-            <div className="grid grid-cols-2 gap-4 mb-5">
-                <Input
-                    label="Search Exercises"
-                    value={nameQuery}
-                    onValueChange={setNameQuery}
-                />
-                <MuscleGroupSelector
-                    value={muscleGroupFilter}
-                    onChange={setMuscleGroupFilter}
-                />
+            <div>
+                <h3>
+                    Filters
+                </h3>
+                <div className="grid grid-cols-3 gap-4 mb-5">
+                    <Input
+                        label="Search Exercises"
+                        value={nameQuery}
+                        onValueChange={setNameQuery}
+                    />
+                    <MuscleGroupSelector
+                        value={muscleGroupFilter}
+                        onChange={setMuscleGroupFilter}
+                    />
+                    <EquipmentGroupSelector
+                        value={equipmentGroupFilter}
+                        onChange={setEquipmentGroupFilter}
+                    />
+                </div>
             </div>
             <div className="grid grid-cols-1 @lg:grid-cols-4 gap-4">
                 {shownExercises.map((exercise) => (
@@ -121,6 +121,7 @@ export default function ExercisesList({
                         overrideOnPress={overrideOnPress}
                     />
                 ))}
+                <ExecuteWhenOnScreen onScreen={loadMore} />
             </div>
         </div>
     );

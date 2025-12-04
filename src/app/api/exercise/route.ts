@@ -31,6 +31,14 @@ async function get_handler(req: NextRequest) {
         ? rawEquipmentIDs.map((id) => parseInt(id, 10))
         : undefined;
 
+    console.log("Fetching exercises with filters:", {
+        nameQuery,
+        muscleGroupIDs,
+        equipmentIDs,
+        page,
+        pageSize,
+    });
+
     const exercises = await ExerciseModel.getAllExercises({
         nameQuery,
         muscleGroupIDs,

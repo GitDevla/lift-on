@@ -173,7 +173,7 @@ export class Backend {
             if (filters.muscleGroupIDs && filters.muscleGroupIDs.length > 0) {
                 queryParams.muscleGroupIDs = filters.muscleGroupIDs.join(",");
             }
-            if (filters.equipmentIDs) {
+            if (filters.equipmentIDs && filters.equipmentIDs.length > 0) {
                 queryParams.equipmentIDs = filters.equipmentIDs.join(",");
             }
             if (filters.page) {
@@ -190,6 +190,12 @@ export class Backend {
         BackendResponse<Array<{ id: number; name: string }>>
     > {
         return Backend.GET<Array<{ id: number; name: string }>>("/api/muscles");
+    }
+
+    static async getEquipment(): Promise<
+        BackendResponse<Array<{ id: number; name: string }>>
+    > {
+        return Backend.GET<Array<{ id: number; name: string }>>("/api/equipment");
     }
 
     static async startNewWorkout(): Promise<
