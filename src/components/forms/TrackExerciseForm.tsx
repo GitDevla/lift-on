@@ -110,7 +110,10 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                                 <Input
                                     label="Previous"
                                     placeholder="Previous"
-                                    value={set.weight + " x " + set.reps}
+                                    value={exercise.previousSets && exercise.previousSets[set.order - 1]
+                                        ? `${exercise.previousSets[set.order - 1].weight} kg x ${exercise.previousSets[set.order - 1].repetitions}`
+                                        : "N/A"}
+                                    readOnly
                                     isDisabled
                                 />
                             </div>

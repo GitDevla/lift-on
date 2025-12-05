@@ -4,7 +4,11 @@ import { use, useEffect, useState } from "react";
 import type { Exercise } from "@/generated/prisma/client";
 import type { SetType } from "@/generated/prisma/enums";
 import { Backend } from "@/lib/backend";
-import { type Workout, WorkoutContext } from "../contexts/WorkoutContext";
+import {
+    type SetInExercise,
+    type Workout,
+    WorkoutContext,
+} from "../contexts/WorkoutContext";
 
 export default function WorkoutProvider({
     children,
@@ -50,12 +54,19 @@ export default function WorkoutProvider({
         if (currentWorkout?.exercises.find((ex) => ex.id === exercise.id)) {
             return;
         }
+        const previousSetsResponse = await Backend.getUserStatForExercise(
+            exercise.id,
+        );
+        let previousSets: SetInExercise[] | undefined;
         if (currentWorkout) {
             const newExercise = {
                 id: exercise.id,
                 name: exercise.name,
                 imageUrl: exercise.imageUrl as string,
                 sets: [],
+                previousSets: previousSetsResponse.ok
+                    ? previousSetsResponse.data.lastPerformed
+                    : undefined,
             };
             setCurrentWorkout({
                 ...currentWorkout,

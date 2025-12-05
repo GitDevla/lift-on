@@ -72,4 +72,20 @@ export default class ExerciseService {
 
         return updatedExercise;
     }
+
+    static async getUserStatForExercise(userId: string, exerciseId: number) {
+        const lastPerformedByUser = await ExerciseModel.lastPerformedByUser(exerciseId, userId);
+
+        return {
+            lastPerformed: lastPerformedByUser,
+        };
+    }
+
+    static async getUserTrendForExercise(userId: string, exerciseId: number) {
+
+    }
+
+    static async getLastPerformanceForExercise(userId: string, exerciseId: number) {
+        return ExerciseModel.lastPerformedByUser(exerciseId, userId);
+    }
 }

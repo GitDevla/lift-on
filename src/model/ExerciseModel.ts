@@ -128,6 +128,33 @@ export class ExerciseModel {
             },
         });
     }
+
+    static async lastPerformedByUser(exerciseId: number, userId: string) {
+        const result = await prisma.workoutExercise.findMany({
+            where: {
+                exerciseId: exerciseId,
+                workout: {
+                    userId: userId,
+                },
+            },
+            orderBy: {
+                workout: {
+                    endedAt: "desc",
+                },
+            },
+            take: 1,
+            include: {
+                workout: true,
+                sets: true,
+            },
+        });
+
+        if (result.length === 0) {
+            return null;
+        }
+
+        return result[0].sets;
+    }
 }
 
 export type ExerciseWithRelations = Awaited<

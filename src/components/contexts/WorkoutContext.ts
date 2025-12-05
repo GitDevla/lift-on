@@ -15,6 +15,10 @@ export interface ExerciseInWorkout {
     name: string;
     imageUrl: string;
     sets: SetInExercise[];
+    previousSets?: {
+        repetitions: number;
+        weight: number;
+    }[];
 }
 
 export interface SetInExercise {

@@ -250,4 +250,18 @@ export class Backend {
         queryParams.workoutID = workoutId;
         return Backend.DELETE<null>("/api/track", queryParams);
     }
+
+    static async getUserStatForExercise(
+        exerciseId: number,
+    ): Promise<BackendResponse<{
+        lastPerformed: Array<{
+            repetitions: number; weight: number;
+        }>
+    }>> {
+        return Backend.GET<{
+            lastPerformed: Array<{
+                repetitions: number; weight: number;
+            }>
+        }>(`/api/exercise/${exerciseId}`);
+    }
 }
