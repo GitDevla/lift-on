@@ -19,12 +19,13 @@ export default function CustomNavbar() {
         <Navbar isBordered>
             <NavbarContent justify="start">
                 <NavbarBrand className="mr-4">
-                    <p className="hidden sm:block font-bold text-inherit">Lift-On</p>
+                    <Link href="/" className="font-bold text-xl" color="secondary">
+                        Lift-On
+                    </Link>
                 </NavbarBrand>
-                <NavbarContent className="hidden sm:flex gap-3">
-                    <NavbarItem>
-                        <Link href="/">Home</Link>
-                    </NavbarItem>
+            </NavbarContent>
+            <NavbarContent>
+                <NavbarContent className="flex gap-6" as="div" justify="center">
                     <NavbarItem>
                         <Link href="/exercises">Exercises</Link>
                     </NavbarItem>
