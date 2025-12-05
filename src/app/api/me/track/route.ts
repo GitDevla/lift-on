@@ -1,15 +1,11 @@
 import type { NextRequest } from "next/server";
 import type { Workout } from "@/components/contexts/WorkoutContext";
+import { forceAuthMiddleware, type RequestContext } from "@/lib/authMiddleware";
 import { errorMiddleware, UnauthorizedError } from "@/lib/errorMiddleware";
-import { getUser } from "@/lib/getUser";
 import { UserService } from "@/service/UserService";
 
-async function get_handler(req: NextRequest) {
-    const user = await getUser(req);
-
-    if (!user) {
-        throw new UnauthorizedError("Invalid or missing authentication token.");
-    }
+async function get_handler(req: NextRequest, ctx: RequestContext) {
+    const user = ctx.user;
 
     const page = parseInt(req.nextUrl.searchParams.get("page") || "1", 10);
     const pageSize = parseInt(
@@ -17,7 +13,7 @@ async function get_handler(req: NextRequest) {
         10,
     );
 
-    const workouts = await UserService.getUserWorkouts(user.id, page, pageSize);
+    const workouts = await UserService.getUserWorkouts(user.id as string, page, pageSize);
     const formatedWorkouts: Workout[] = workouts.map((workout) => ({
         id: workout.id,
         startTime: workout.startedAt,
@@ -42,4 +38,4 @@ async function get_handler(req: NextRequest) {
     });
 }
 
-export const GET = errorMiddleware(get_handler);
+export const GET = errorMiddleware(forceAuthMiddleware(get_handler));

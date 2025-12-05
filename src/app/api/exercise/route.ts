@@ -1,4 +1,6 @@
 import type { NextRequest } from "next/server";
+import { adminMiddleware } from "@/lib/adminMiddleware";
+import { forceAuthMiddleware } from "@/lib/authMiddleware";
 import { errorMiddleware } from "@/lib/errorMiddleware";
 import prisma from "@/lib/prisma";
 import {
@@ -56,7 +58,6 @@ async function get_handler(req: NextRequest) {
 async function post_handler(req: NextRequest) {
     const body = (await req.json()) as ExerciseWithRelations;
 
-
     const createdExercise = await ExerciseService.createExercise(body);
 
     return new Response(JSON.stringify(createdExercise), {
@@ -65,6 +66,8 @@ async function post_handler(req: NextRequest) {
     });
 }
 
-export const POST = errorMiddleware(post_handler);
+export const POST = errorMiddleware(
+    forceAuthMiddleware(adminMiddleware(post_handler)),
+);
 
 export const GET = errorMiddleware(get_handler);

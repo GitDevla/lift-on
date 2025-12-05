@@ -1,29 +1,29 @@
 import { type NextRequest, NextResponse } from "next/server";
+import type { RequestContext } from "./authMiddleware";
 
 export const errorMiddleware =
-    (handler: Function) =>
-        async (req: NextRequest, res: NextResponse) => {
-            try {
-                return await handler(req, res);
-            } catch (error) {
-                if (error instanceof ExpectedError) {
-                    return NextResponse.json(
-                        {
-                            message: error.message,
-                            details: error.details
-                        },
-                        { status: error.status },
-                    );
-                } else {
-                    console.log(error);
-                    return NextResponse.json(
-                        { message: "Server died for some reason" },
-                        { status: 500 },
-                    );
-                }
+    (handler: Function) => async (req: NextRequest, ctx: RequestContext) => {
+        try {
+            return await handler(req, ctx);
+        } catch (error) {
+            if (error instanceof ExpectedError) {
+                return NextResponse.json(
+                    {
+                        message: error.message,
+                        details: error.details,
+                    },
+                    { status: error.status },
+                );
             }
-        };
 
+            console.error(error);
+
+            return NextResponse.json(
+                { message: "Server died for some reason" },
+                { status: 500 },
+            );
+        }
+    };
 
 export class ExpectedError extends Error {
     status: number;

@@ -1,22 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { errorMiddleware, UnauthorizedError } from "@/lib/errorMiddleware";
+import { forceAuthMiddleware, type RequestContext } from "@/lib/authMiddleware";
+import { errorMiddleware } from "@/lib/errorMiddleware";
 import { UserModel } from "@/model/UserModel";
-import JWTService from "@/service/JWTService";
 
-async function get_handler(req: NextRequest) {
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        throw new UnauthorizedError("Unauthorized");
-    }
-
-    const token = authHeader.split(" ")[1];
-    const userID = await JWTService.decodeToken(token);
-    const user = await UserModel.findById(userID?.id as string);
-    if (!user) {
-        throw new UnauthorizedError("Unauthorized");
-    }
-
+async function get_handler(req: NextRequest, ctx: RequestContext) {
+    const userID = ctx.user.id;
+    const user = await UserModel.findById(userID as unknown as string);
     return NextResponse.json({ user });
 }
 
-export const GET = errorMiddleware(get_handler);
+export const GET = errorMiddleware(forceAuthMiddleware(get_handler));
