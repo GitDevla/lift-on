@@ -63,10 +63,12 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                 </div>
                 <div>
                     <div className={cn("grid font-bold gap-3 text-content4-foreground mb-2",
-                        workoutContext.readonly ? "grid-cols-7" : "grid-cols-9"
+                        workoutContext.readonly ? "grid-cols-5" : "grid-cols-9"
                     )}>
                         <div className="text-center">Type</div>
-                        <div className="col-span-2 text-center">Prev</div>
+                        {workoutContext.readonly ? null : (
+                            <div className="col-span-2 text-center">Prev</div>
+                        )}
                         <div className="col-span-2 text-center">Weight</div>
                         <div className="col-span-2 text-center">Rep</div>
                         {workoutContext.readonly ? null : (
@@ -82,7 +84,7 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                             className={cn(
                                 "grid gap-3 items-center justify-items-center p-2  rounded-md",
                                 set.done && "bg-green-500",
-                                workoutContext.readonly ? "grid-cols-7" : "grid-cols-9"
+                                workoutContext.readonly ? "grid-cols-5" : "grid-cols-9"
                             )}
                         >
                             <div className="w-full">
@@ -106,17 +108,19 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                                     ))}
                                 </Select>
                             </div>
-                            <div className="col-span-2 w-full">
-                                <Input
-                                    label="Previous"
-                                    placeholder="Previous"
-                                    value={exercise.previousSets && exercise.previousSets[set.order - 1]
-                                        ? `${exercise.previousSets[set.order - 1].weight} kg x ${exercise.previousSets[set.order - 1].repetitions}`
-                                        : "N/A"}
-                                    readOnly
-                                    isDisabled
-                                />
-                            </div>
+                            {workoutContext.readonly ? null : (
+                                <div className="col-span-2 w-full">
+                                    <Input
+                                        label="Previous"
+                                        placeholder="Previous"
+                                        value={exercise.previousSets && exercise.previousSets[set.order - 1]
+                                            ? `${exercise.previousSets[set.order - 1].weight} kg x ${exercise.previousSets[set.order - 1].repetitions}`
+                                            : "N/A"}
+                                        readOnly
+                                        isDisabled
+                                    />
+                                </div>
+                            )}
                             <div className="col-span-2 w-full">
                                 <NumberInput
                                     label="Weight"

@@ -155,6 +155,20 @@ export class ExerciseModel {
 
         return result[0].sets;
     }
+
+    static async getStatsForExercise(exerciseId: number, userId: string) {
+        const result = await prisma.$queryRaw<any>`
+            SELECT 
+                MAX(ws.weight * (1 + ws.repetitions / 30.0)) AS one_rm,
+                w.startedAt AS workout_date
+            FROM 'WorkoutExercise' we
+            JOIN 'Set' ws ON we.workoutId = ws.workoutExerciseWorkoutId AND we.exerciseId = ws.workoutExerciseExerciseId
+            JOIN 'Workout' w ON we.workoutId = w.id
+            WHERE we.exerciseId = ${exerciseId} AND w.userId = ${userId}
+            GROUP BY we.workoutId;
+        `;
+        return result;
+    }
 }
 
 export type ExerciseWithRelations = Awaited<

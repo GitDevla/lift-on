@@ -1,14 +1,16 @@
 import { NotFoundError } from "@/lib/errorMiddleware";
 import prisma from "@/lib/prisma";
-import { ExerciseModel, type ExerciseWithRelations } from "@/model/ExerciseModel";
+import {
+    ExerciseModel,
+    type ExerciseWithRelations,
+} from "@/model/ExerciseModel";
 import { ImageModel } from "@/model/ImageModel";
 
 export default class ExerciseService {
     static async updateExercise(exerciseId: number, data: ExerciseWithRelations) {
         const existingExercise = await ExerciseModel.getExerciseById(exerciseId);
 
-        if (!existingExercise)
-            throw new NotFoundError("Exercise not found");
+        if (!existingExercise) throw new NotFoundError("Exercise not found");
 
         if (existingExercise.name !== data.name) {
             existingExercise.name = data.name;
@@ -17,7 +19,6 @@ export default class ExerciseService {
             existingExercise.description = data.description;
         }
         if (existingExercise.imageUrl !== data.imageUrl) {
-
             if (
                 existingExercise.imageUrl &&
                 !existingExercise.imageUrl.startsWith("http")
@@ -27,9 +28,14 @@ export default class ExerciseService {
 
             let newPath = data.imageUrl;
             if (data.imageUrl) {
-                newPath = await ImageModel.save(data.imageUrl, `exercise_${exerciseId}`);
+                newPath = await ImageModel.save(
+                    data.imageUrl,
+                    `exercise_${exerciseId}`,
+                );
             }
-            existingExercise.imageUrl = newPath ? newPath.replace("public/", "/") : null;
+            existingExercise.imageUrl = newPath
+                ? newPath.replace("public/", "/")
+                : null;
         }
 
         const updatedExercise = await ExerciseModel.updateExercise(
@@ -55,7 +61,10 @@ export default class ExerciseService {
 
         let imageUrl = "";
         if (data.imageUrl) {
-            const savedPath = await ImageModel.save(data.imageUrl, `exercise_${newExercise.id}`);
+            const savedPath = await ImageModel.save(
+                data.imageUrl,
+                `exercise_${newExercise.id}`,
+            );
             imageUrl = savedPath.replace("public/", "/");
         }
 
@@ -74,18 +83,29 @@ export default class ExerciseService {
     }
 
     static async getUserStatForExercise(userId: string, exerciseId: number) {
-        const lastPerformedByUser = await ExerciseModel.lastPerformedByUser(exerciseId, userId);
+        const lastPerformedByUser = await ExerciseModel.lastPerformedByUser(
+            exerciseId,
+            userId,
+        );
+        const statsForExercise = await ExerciseModel.getStatsForExercise(
+            exerciseId,
+            userId,
+        );
 
         return {
             lastPerformed: lastPerformedByUser,
+            stats: statsForExercise,
         };
     }
 
     static async getUserTrendForExercise(userId: string, exerciseId: number) {
-
+        return ExerciseModel.getStatsForExercise(exerciseId, userId);
     }
 
-    static async getLastPerformanceForExercise(userId: string, exerciseId: number) {
+    static async getLastPerformanceForExercise(
+        userId: string,
+        exerciseId: number,
+    ) {
         return ExerciseModel.lastPerformedByUser(exerciseId, userId);
     }
 }

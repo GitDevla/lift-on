@@ -1,4 +1,5 @@
-import { cn } from "clsx-for-tailwind";
+import { useContext, useEffect, useState } from "react";
+import { Backend } from "@/lib/backend";
 import {
     Button,
     Chip,
@@ -10,6 +11,8 @@ import {
     ModalHeader,
 } from "@/lib/heroui";
 import type { ExerciseWithRelations } from "@/model/ExerciseModel";
+import { AuthContext } from "../contexts/AuthContext";
+import OneRepMaxGraph from "../graphs/oneRepMaxGraph";
 
 export default function ExerciseModal({
     exercise,
@@ -22,6 +25,29 @@ export default function ExerciseModal({
         onOpenChange: (isOpen: boolean) => void;
     };
 }) {
+    const authContext = useContext(AuthContext);
+    const loggedIn = authContext.user !== null;
+    const [userStats, setUserStats] = useState<{
+        lastPerformed: Array<{
+            repetitions: number;
+            weight: number;
+        }>;
+        stats: Array<{
+            one_rm: number;
+            workout_date: string;
+        }>;
+    } | null>(null);
+
+    useEffect(() => {
+        if (loggedIn) {
+            Backend.getUserStatForExercise(exercise.id).then((response) => {
+                if (response.ok) {
+                    setUserStats(response.data);
+                }
+            });
+        }
+    }, [loggedIn, exercise.id]);
+
     const { isOpen, onOpen, onOpenChange } = disclosure;
     return (
         <Modal
@@ -77,6 +103,19 @@ export default function ExerciseModal({
                                     </li>
                                 ))}
                             </ul>
+                            {loggedIn ? (
+                                <div className="mt-4 text-sm text-gray-500 italic">
+                                    <h4>Your Progress with this Exercise:</h4>
+                                    <div>
+                                        <OneRepMaxGraph stats={userStats?.stats || []} />
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="mt-4 text-sm text-gray-500 italic">
+                                    Log in to track your progress with this exercise from the
+                                    Track page.
+                                </div>
+                            )}
                         </ModalBody>
                         <ModalFooter>
                             <Button color="danger" onPress={onClose}>

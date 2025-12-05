@@ -256,11 +256,18 @@ export class Backend {
     ): Promise<BackendResponse<{
         lastPerformed: Array<{
             repetitions: number; weight: number;
+        }>,
+        stats: Array<{
+            one_rm: number;
+            workout_date: string;
         }>
     }>> {
         return Backend.GET<{
             lastPerformed: Array<{
                 repetitions: number; weight: number;
+            }>, stats: Array<{
+                one_rm: number;
+                workout_date: string;
             }>
         }>(`/api/exercise/${exerciseId}`);
     }
