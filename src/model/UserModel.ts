@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 
 export class UserModel {
     static async create(username: string, email: string, passwordHash: string) {
-        prisma.user.create({
+        return await prisma.user.create({
             data: {
                 username,
                 email,
