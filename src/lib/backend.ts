@@ -201,10 +201,12 @@ export class Backend {
     static async startNewWorkout(): Promise<
         BackendResponse<{
             workout: { id: number; startedAt: string; endedAt: string | null };
+            new: boolean;
         }>
     > {
         return Backend.POST<{
             workout: { id: number; startedAt: string; endedAt: string | null };
+            new: boolean;
         }>("/api/track", {});
     }
 

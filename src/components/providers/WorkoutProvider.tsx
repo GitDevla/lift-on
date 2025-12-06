@@ -25,6 +25,17 @@ export default function WorkoutProvider({
         if (!serverWorkout.ok) {
             throw new Error("Failed to start new workout");
         }
+        if (!serverWorkout.data.new) {
+            alert("You have an unfinished workout. Continuing that workout.");
+            const existingWorkout = await Backend.getWorkoutById(
+                serverWorkout.data.workout.id,
+            );
+            if (!existingWorkout.ok) {
+                throw new Error("Failed to fetch existing workout");
+            }
+            setCurrentWorkout(existingWorkout.data.workout);
+            return;
+        }
         setCurrentWorkout({
             id: serverWorkout.data.workout.id,
             startTime: new Date(serverWorkout.data.workout.startedAt),

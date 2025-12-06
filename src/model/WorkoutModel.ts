@@ -93,4 +93,21 @@ export class WorkoutModel {
             where: { id: workoutId },
         });
     }
+
+    static async userHasUnfinishedWorkouts(userId: string) {
+        const wo = await prisma.workout.findFirst({
+            where: {
+                userId: userId,
+                endedAt: null,
+            },
+        });
+        return wo;
+    }
+
+    static async upsertWorkoutEndTime(workoutId: number, endedAt: Date | null) {
+        return prisma.workout.update({
+            where: { id: workoutId },
+            data: { endedAt },
+        });
+    }
 }

@@ -4,8 +4,20 @@ import { WorkoutModel } from "@/model/WorkoutModel";
 
 export class WorkoutService {
     static async startNewWorkout(userId: string) {
+        const existingWorkout = await WorkoutModel.userHasUnfinishedWorkouts(userId);
+        if (existingWorkout) {
+            return {
+                new: false,
+                workout: existingWorkout,
+            }
+        }
+
+
         const workout = await WorkoutModel.create(userId);
-        return workout;
+        return {
+            new: true,
+            workout,
+        };
     }
 
     static async updateWorkout(workout: Workout) {
@@ -15,6 +27,11 @@ export class WorkoutService {
         if (!dbWorkout) {
             throw new NotFoundError("Workout not found");
         }
+        await WorkoutModel.upsertWorkoutEndTime(
+            workoutId,
+            workout.endTime,
+        );
+
 
         await WorkoutModel.clearWorkoutExercises(workoutId);
 
