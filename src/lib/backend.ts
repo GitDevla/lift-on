@@ -135,8 +135,8 @@ export class Backend {
     static async login(
         username: string,
         password: string,
-    ): Promise<BackendResponse<{ token: string }>> {
-        return Backend.POST<{ token: string }>("/api/auth/login", {
+    ): Promise<BackendResponse<{ token: string, user: User }>> {
+        return Backend.POST<{ token: string, user: User }>("/api/auth/login", {
             username,
             password,
         });

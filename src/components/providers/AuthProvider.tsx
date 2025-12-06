@@ -22,7 +22,7 @@ export default function AuthProvider({
         }
 
         localStorage.setItem("authToken", login.data.token);
-        setUser({ id: "1", username, email: "" } as User);
+        setUser(login.data.user);
         addToast({
             title: "Login successful!",
             color: "success",

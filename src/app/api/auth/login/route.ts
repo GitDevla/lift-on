@@ -17,7 +17,13 @@ async function post_handler(req: NextRequest, ctx: any) {
             parsed.data.password,
         );
         const token = await JWTService.generateUserToken(user);
-        return NextResponse.json({ token }, { status: 200 });
+        const safeUser = {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            role: user.role,
+        };
+        return NextResponse.json({ token, user: safeUser }, { status: 200 });
     } catch (error) {
         throw new UnauthorizedError("Invalid username or password"); // Generic error to avoid leaking info
     }
