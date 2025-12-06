@@ -57,7 +57,7 @@ export default function LoginForm() {
                 labelPlacement="outside"
                 placeholder="Enter your password"
             />
-            <Button type="submit">Login</Button>
+            <Button type="submit" color="primary">Login</Button>
         </Form>
     );
 }

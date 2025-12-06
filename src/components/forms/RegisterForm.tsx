@@ -65,7 +65,7 @@ export default function RegisterForm() {
                 labelPlacement="outside"
                 placeholder="Enter your password"
             />
-            <Button type="submit">Register</Button>
+            <Button type="submit" color="primary">Register</Button>
         </Form>
     );
 }
