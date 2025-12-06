@@ -90,28 +90,20 @@ export default function ExercisesList({
 
     return (
         <div className="@container">
-            <div>
-                <h1 className="text-2xl font-bold mb-4 text-center">Exercises</h1>
-            </div>
-            <div>
-                <h3>
-                    Filters
-                </h3>
-                <div className="grid grid-cols-3 gap-4 mb-5">
-                    <Input
-                        label="Search Exercises"
-                        value={nameQuery}
-                        onValueChange={setNameQuery}
-                    />
-                    <MuscleGroupSelector
-                        value={muscleGroupFilter}
-                        onChange={setMuscleGroupFilter}
-                    />
-                    <EquipmentGroupSelector
-                        value={equipmentGroupFilter}
-                        onChange={setEquipmentGroupFilter}
-                    />
-                </div>
+            <div className="grid grid-cols-3 gap-4 mb-5">
+                <Input
+                    label="Search Exercises"
+                    value={nameQuery}
+                    onValueChange={setNameQuery}
+                />
+                <MuscleGroupSelector
+                    value={muscleGroupFilter}
+                    onChange={setMuscleGroupFilter}
+                />
+                <EquipmentGroupSelector
+                    value={equipmentGroupFilter}
+                    onChange={setEquipmentGroupFilter}
+                />
             </div>
             <div className="grid grid-cols-1 @lg:grid-cols-4 gap-4">
                 {shownExercises.map((exercise) => (
@@ -123,6 +115,6 @@ export default function ExercisesList({
                 ))}
                 <ExecuteWhenOnScreen onScreen={loadMore} />
             </div>
-        </div>
+        </div >
     );
 }

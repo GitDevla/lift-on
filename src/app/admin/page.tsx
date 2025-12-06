@@ -1,5 +1,11 @@
 "use client";
-import { Button, useDisclosure } from "@heroui/react";
+import {
+    addToast,
+    Button,
+    Divider,
+    useDisclosure,
+} from "@heroui/react";
+import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
 import { AuthContext } from "@/components/contexts/AuthContext";
 import ExercisesList from "@/components/lists/ExercisesList";
@@ -11,28 +17,46 @@ export default function AdminPage() {
     const [selectedExercise, setSelectedExercise] =
         useState<ExerciseWithRelations | null>(null);
     const authContext = useContext(AuthContext);
-
-    if (authContext.user?.role !== "ADMIN") {
-        return <p>Access Denied</p>;
+    const router = useRouter();
+    if (!authContext.loading && authContext.user?.role !== "ADMIN") {
+        addToast({
+            title: "Access Denied",
+            description: "You do not have permission to access the admin panel.",
+            color: "danger",
+        });
+        router.push("/");
     }
     return (
-        <div>
-            <h1>Admin Dashboard</h1>
-            <section>
-                <h2>Edit Exercises</h2>
+        <div className="space-y-6">
+            <div className="flex items-center justify-between">
+                <div>
+                    <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+                    <p className="text-gray-400 mt-1">Manage exercises and app content</p>
+                </div>
+            </div>
+
+            <Divider />
+
+            <section className="space-y-4">
+                <div className="flex items-center justify-between">
+                    <h2 className="text-xl font-semibold">Exercise Management</h2>
+                    <Button
+                        onPress={() => {
+                            setSelectedExercise(null);
+                            disclosure.onOpen();
+                        }}
+                        color="primary"
+                        size="lg"
+                    >
+                        + Add New Exercise
+                    </Button>
+                </div>
+
                 <EditExerciseModal
                     disclosure={disclosure}
                     exercise={selectedExercise}
-                ></EditExerciseModal>
-                <Button
-                    onPress={() => {
-                        setSelectedExercise(null);
-                        disclosure.onOpen();
-                    }}
-                    color="primary"
-                >
-                    Add New Exercise
-                </Button>
+                />
+
                 <ExercisesList
                     overrideOnPress={(exercise) => {
                         setSelectedExercise(exercise);

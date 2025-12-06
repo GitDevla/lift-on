@@ -62,6 +62,9 @@ export default function AuthProvider({
                     localStorage.removeItem("authToken");
                 });
         }
+        else {
+            setLoading(false);
+        }
     }, []);
 
     return (

@@ -39,6 +39,9 @@ export default function ExerciseModal({
     } | null>(null);
 
     useEffect(() => {
+        if (!disclosure.isOpen) {
+            return;
+        }
         if (loggedIn) {
             Backend.getUserStatForExercise(exercise.id).then((response) => {
                 if (response.ok) {
@@ -46,7 +49,7 @@ export default function ExerciseModal({
                 }
             });
         }
-    }, [loggedIn, exercise.id]);
+    }, [loggedIn, exercise.id, disclosure.isOpen]);
 
     const { isOpen, onOpen, onOpenChange } = disclosure;
     return (

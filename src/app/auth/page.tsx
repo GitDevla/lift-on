@@ -1,5 +1,5 @@
 "use client";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
 import { AuthContext } from "@/components/contexts/AuthContext";
 import LoginForm from "@/components/forms/LoginForm";
@@ -8,9 +8,10 @@ import { Link } from "@/lib/heroui";
 
 export default function AuthPage() {
     const authContext = useContext(AuthContext);
+    const router = useRouter();
     const [isLogin, setIsLogin] = useState(true);
     if (authContext.user) {
-        redirect("/");
+        router.push("/");
     }
 
     return (

@@ -1,5 +1,5 @@
 "use client";
-import { image } from "@heroui/react";
+import { addToast, image } from "@heroui/react";
 import { use, useEffect, useState } from "react";
 import type { Exercise } from "@/generated/prisma/client";
 import type { SetType } from "@/generated/prisma/enums";
@@ -26,7 +26,12 @@ export default function WorkoutProvider({
             throw new Error("Failed to start new workout");
         }
         if (!serverWorkout.data.new) {
-            alert("You have an unfinished workout. Continuing that workout.");
+            addToast({
+                title: "Resuming Previous Workout",
+                description:
+                    "You have an unfinished workout. Resuming your previous session.",
+                color: "warning",
+            });
             const existingWorkout = await Backend.getWorkoutById(
                 serverWorkout.data.workout.id,
             );

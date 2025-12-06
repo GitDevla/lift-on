@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useContext, useState } from "react";
 import { addToast, Button, Form, Input } from "@/lib/heroui";
 import { loginSchema } from "@/validation/AuthSchema";
@@ -7,6 +7,7 @@ import { AuthContext } from "../contexts/AuthContext";
 export default function LoginForm() {
     const authContext = useContext(AuthContext);
     const [errors, setErrors] = useState<Record<string, string[]>>({});
+    const router = useRouter();
 
     function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -24,7 +25,7 @@ export default function LoginForm() {
                     title: "Login successful!",
                     color: "success",
                 });
-                redirect("/");
+                router.push("/");
             })
             .catch((err) => {
                 addToast({
