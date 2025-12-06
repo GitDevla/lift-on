@@ -10,7 +10,7 @@ export class UserService {
         }
         const emailExists = await UserModel.findByEmail(email);
         if (emailExists) {
-            throw new ConflictError("Username already taken");
+            throw new ConflictError("Email already taken");
         }
 
         const hashPassword = await HashService.hashPassword(password);
