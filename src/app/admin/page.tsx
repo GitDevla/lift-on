@@ -1,6 +1,7 @@
 "use client";
 import { Button, useDisclosure } from "@heroui/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "@/components/contexts/AuthContext";
 import ExercisesList from "@/components/lists/ExercisesList";
 import EditExerciseModal from "@/components/modal/EditExerciseModal";
 import type { ExerciseWithRelations } from "@/model/ExerciseModel";
@@ -9,6 +10,11 @@ export default function AdminPage() {
     const disclosure = useDisclosure();
     const [selectedExercise, setSelectedExercise] =
         useState<ExerciseWithRelations | null>(null);
+    const authContext = useContext(AuthContext);
+
+    if (authContext.user?.role !== "ADMIN") {
+        return <p>Access Denied</p>;
+    }
     return (
         <div>
             <h1>Admin Dashboard</h1>
