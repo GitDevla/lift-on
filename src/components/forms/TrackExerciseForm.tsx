@@ -101,6 +101,12 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                                             set.done,
                                         )
                                     }
+                                    classNames={{
+                                        popoverContent: "min-w-[200px] w-[300px]"
+                                    }}
+                                    renderValue={(items) => {
+                                        return <p>{items.map(i => i.textValue?.slice(0, 2))}</p>
+                                    }}
                                     isDisabled={workoutContext.readonly || set.done}
                                 >
                                     {Object.values(SetType).map((type) => (
