@@ -14,5 +14,5 @@ export async function getUser(req: NextRequest) {
     if (!decodedToken) {
         return null;
     }
-    return UserModel.findById(decodedToken.id);
+    return UserModel.findById(decodedToken.id as unknown as string);
 }

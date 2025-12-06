@@ -4,7 +4,7 @@ import AuthService from "@/service/AuthService";
 import JWTService from "@/service/JWTService";
 import { loginSchema } from "@/validation/AuthSchema";
 
-async function post_handler(req: NextRequest) {
+async function post_handler(req: NextRequest, ctx: any) {
     const body = await req.json();
     const parsed = loginSchema.safeParse(body);
 

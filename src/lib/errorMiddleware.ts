@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import type { RequestContext } from "./authMiddleware";
 
 export const errorMiddleware =
-    (handler: Function) => async (req: NextRequest, ctx: RequestContext) => {
+    (handler: Function) => async (req: NextRequest, ctx: any) => {
         try {
             return await handler(req, ctx);
         } catch (error) {

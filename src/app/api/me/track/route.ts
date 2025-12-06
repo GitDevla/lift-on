@@ -13,7 +13,7 @@ async function get_handler(req: NextRequest, ctx: RequestContext) {
         10,
     );
 
-    const workouts = await UserService.getUserWorkouts(user.id as string, page, pageSize);
+    const workouts = await UserService.getUserWorkouts(user.id as unknown as string, page, pageSize);
     const formatedWorkouts: Workout[] = workouts.map((workout) => ({
         id: workout.id,
         startTime: workout.startedAt,

@@ -21,7 +21,7 @@ export class WorkoutService {
     }
 
     static async updateWorkout(workout: Workout) {
-        const workoutId = parseInt(workout.id, 10);
+        const workoutId = parseInt(workout.id as unknown as string, 10);
 
         const dbWorkout = await WorkoutModel.getWorkoutById(workoutId);
         if (!dbWorkout) {

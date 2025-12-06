@@ -23,7 +23,7 @@ export default class ExerciseService {
                 existingExercise.imageUrl &&
                 !existingExercise.imageUrl.startsWith("http")
             ) {
-                await ImageModel.delete("public" + existingExercise.imageUrl);
+                await ImageModel.delete("public" + existingExercise.imageUrl.replace("/api/", ""));
             }
 
             let newPath = data.imageUrl;
@@ -34,7 +34,7 @@ export default class ExerciseService {
                 );
             }
             existingExercise.imageUrl = newPath
-                ? newPath.replace("public/", "/")
+                ? newPath.replace("public/", "/api/")
                 : null;
         }
 
@@ -65,7 +65,7 @@ export default class ExerciseService {
                 data.imageUrl,
                 `exercise_${newExercise.id}`,
             );
-            imageUrl = savedPath.replace("public/", "/");
+            imageUrl = savedPath.replace("public/", "/api/");
         }
 
         const updatedExercise = await ExerciseModel.updateExercise(
