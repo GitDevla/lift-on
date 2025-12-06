@@ -1,4 +1,5 @@
 import type React from "react";
+import { useState } from "react";
 import {
     Button,
     Modal,
@@ -6,6 +7,7 @@ import {
     ModalContent,
     ModalFooter,
     ModalHeader,
+    Switch,
     useDisclosure,
 } from "@/lib/heroui";
 import type { Workout } from "../contexts/WorkoutContext";
@@ -20,6 +22,7 @@ export default function CollapsedWorkoutModal({
     workout: Workout;
 }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const [editable, setEditable] = useState<boolean>(false);
 
     return (
         <>
@@ -37,19 +40,16 @@ export default function CollapsedWorkoutModal({
                                 <h3 className="text-lg font-semibold">Edit Workout</h3>
                             </ModalHeader>
                             <ModalBody>
-                                <WorkoutProvider data={workout}>
+                                <Switch isSelected={editable} onValueChange={setEditable} className="mb-4">
+                                    {editable ? "Editing Enabled" : "Read-Only Mode"}
+                                </Switch>
+                                <WorkoutProvider data={workout} editable={editable}>
                                     <WorkoutForm />
                                 </WorkoutProvider>
                             </ModalBody>
                             <ModalFooter className="flex justify-end gap-2">
-                                <Button variant="light" onPress={onClose}>
-                                    Cancel
-                                </Button>
-                                <Button
-                                    color="danger"
-                                    onPress={() => { }}
-                                >
-                                    Save
+                                <Button onPress={onClose} color="primary">
+                                    OK
                                 </Button>
                             </ModalFooter>
                         </>

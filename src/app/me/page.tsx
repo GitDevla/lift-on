@@ -5,7 +5,7 @@ import { AuthContext } from "@/components/contexts/AuthContext";
 import type { Workout } from "@/components/contexts/WorkoutContext";
 import CollapsedWorkoutModal from "@/components/modal/CollapsedWorkoutModal";
 import { Backend } from "@/lib/backend";
-import { addToast, Button } from "@/lib/heroui";
+import { addToast, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@/lib/heroui";
 
 export default function MePage() {
     const authContext = useContext(AuthContext);
@@ -58,7 +58,7 @@ export default function MePage() {
                                             trigger={(onOpen) => (
                                                 // biome-ignore lint/a11y/noStaticElementInteractions: <explanation>
                                                 <div
-                                                    className="p-4 border rounded-lg shadow-sm hover:shadow-md cursor-pointer text-left w-full"
+                                                    className="p-4 border rounded-lg shadow-sm hover:shadow-md cursor-pointer text-left w-full relative"
                                                     onClick={onOpen}
                                                     onKeyDown={onOpen}
                                                 >
@@ -70,11 +70,22 @@ export default function MePage() {
                                                         {workout.exercises.length} exercise
                                                         {workout.exercises.length !== 1 ? "s" : ""}
                                                     </p>
-                                                    <Button
-                                                        onPress={() => {
-                                                            Backend.deleteWorkout(workout.id);
-                                                        }}
-                                                    >Delete</Button>
+                                                    <div className="absolute top-2 right-2">
+                                                        <Dropdown>
+                                                            <DropdownTrigger>
+                                                                <Button variant="bordered">Open Menu</Button>
+                                                            </DropdownTrigger>
+                                                            <DropdownMenu>
+                                                                <DropdownItem key="delete" className="text-danger" color="danger"
+                                                                    onPress={() => {
+                                                                        Backend.deleteWorkout(workout.id);
+                                                                    }}
+                                                                >
+                                                                    Delete Workout
+                                                                </DropdownItem>
+                                                            </DropdownMenu>
+                                                        </Dropdown>
+                                                    </div>
                                                 </div>
                                             )}
                                         />

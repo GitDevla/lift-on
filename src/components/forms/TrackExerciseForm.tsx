@@ -63,7 +63,7 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                 </div>
                 <div>
                     <div className={cn("grid font-bold gap-3 text-content4-foreground mb-2",
-                        workoutContext.readonly ? "grid-cols-5" : "grid-cols-9"
+                        workoutContext.readonly ? "grid-cols-5" : "grid-cols-8"
                     )}>
                         <div className="text-center">Type</div>
                         {workoutContext.readonly ? null : (
@@ -72,19 +72,16 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                         <div className="col-span-2 text-center">Weight</div>
                         <div className="col-span-2 text-center">Rep</div>
                         {workoutContext.readonly ? null : (
-                            <>
-                                <div className="text-center">Done</div>
-                                <div className="text-center">Remove</div>
-                            </>
+                            <div className="text-center">Done</div>
                         )}
                     </div>
                     {exercise.sets.map((set) => (
                         <div
                             key={set.id}
                             className={cn(
-                                "grid gap-3 items-center justify-items-center p-2  rounded-md",
+                                "grid gap-3 items-center justify-items-center p-2  rounded-md relative",
                                 set.done && "bg-green-500",
-                                workoutContext.readonly ? "grid-cols-5" : "grid-cols-9"
+                                workoutContext.readonly ? "grid-cols-5" : "grid-cols-8"
                             )}
                         >
                             <div className="w-full">
@@ -101,6 +98,7 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                                             set.done,
                                         )
                                     }
+                                    isRequired
                                     classNames={{
                                         popoverContent: "min-w-[200px] w-[300px]"
                                     }}
@@ -186,14 +184,16 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                                             }
                                         />
                                     </div>
-                                    <div>
+                                    <div className="absolute top-0 right-0">
                                         <ConfirmationModal title="Confirm Deletion" message="You really wanna delete this Set" onConfirm={() => workoutContext.removeSet(exercise.id, set.id)}
                                             trigger={(open) => <Button
                                                 color="danger"
                                                 onPress={open}
                                                 isDisabled={set.done}
+                                                size="sm"
+                                                isIconOnly
                                             >
-                                                Remove
+                                                X
                                             </Button>}>
 
                                         </ConfirmationModal>

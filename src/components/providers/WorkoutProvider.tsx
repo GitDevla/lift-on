@@ -13,9 +13,10 @@ import {
 export default function WorkoutProvider({
     children,
     data,
+    editable,
 }: {
     children: React.ReactNode;
-    readonly?: boolean;
+    editable?: boolean;
     data?: Workout;
 }) {
     const [currentWorkout, setCurrentWorkout] = useState<Workout | null>(null);
@@ -52,7 +53,7 @@ export default function WorkoutProvider({
         if (currentWorkout) {
             const updatedWorkout = {
                 ...currentWorkout,
-                endTime: new Date(),
+                endTime: editable ? new Date() : currentWorkout.endTime,
             };
             currentWorkout.exercises.forEach((exercise, exIndex) => {
                 exercise.sets.forEach((set, setIndex) => {
@@ -241,10 +242,16 @@ export default function WorkoutProvider({
     useEffect(() => {
         if (data) {
             setCurrentWorkout(data);
-            console.log(data);
-            setReadonly(true);
+            if (!editable)
+                setReadonly(true);
+            else
+                setReadonly(false);
         }
-    }, [data]);
+    }, [data, editable]);
+
+    const setEditable = (isEditable: boolean) => {
+        setReadonly(!isEditable);
+    }
 
     return (
         <WorkoutContext.Provider
@@ -260,6 +267,7 @@ export default function WorkoutProvider({
                 removeExercise,
                 moveExerciseUp,
                 moveExerciseDown,
+                setEditable,
             }}
         >
             {children}
