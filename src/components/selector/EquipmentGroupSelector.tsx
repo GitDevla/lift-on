@@ -28,6 +28,7 @@ export default function EquipmentGroupSelector({
             placeholder="Filter by Equipments"
             selectedKeys={value}
             onSelectionChange={(keys) => onChange(Array.from(keys) as string[])}
+            isClearable
         >
             {equipmentGroups.map((mg) => (
                 <SelectItem key={mg.id.toString()} className="capitalize">{mg.name}</SelectItem>

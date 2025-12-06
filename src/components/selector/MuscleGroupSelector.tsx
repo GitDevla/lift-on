@@ -29,6 +29,7 @@ export default function MuscleGroupSelector({
             placeholder="Filter by Muscles"
             selectedKeys={value}
             onSelectionChange={(keys) => onChange(Array.from(keys) as string[])}
+            isClearable
         >
             {muscleGroups.map((mg) => (
                 <SelectItem key={mg.id.toString()} className="capitalize">{mg.name}</SelectItem>
