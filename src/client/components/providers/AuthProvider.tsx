@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { set } from "zod";
-import { Backend } from "@/client/lib/backend";
+import AuthBackend from "@/client/lib/backend/AuthBackend";
 import { addToast } from "@/client/lib/heroui";
 import type { User } from "@/server/generated/prisma/client";
 import { AuthContext } from "../contexts/AuthContext";
@@ -16,7 +15,7 @@ export default function AuthProvider({
     const [loading, setLoading] = useState<boolean>(true);
 
     const login = async (username: string, password: string) => {
-        const login = await Backend.login(username, password);
+        const login = await AuthBackend.login(username, password);
         if (!login.ok) {
             throw new Error(login.error);
         }
@@ -39,7 +38,7 @@ export default function AuthProvider({
         password: string,
         email: string,
     ) => {
-        const register = await Backend.register(username, password, email);
+        const register = await AuthBackend.register(username, password, email);
         if (!register.ok) {
             throw new Error(register.error);
         }
@@ -48,7 +47,7 @@ export default function AuthProvider({
     useEffect(() => {
         const token = localStorage.getItem("authToken");
         if (token) {
-            Backend.getCurrentUser()
+            AuthBackend.getCurrentUser()
                 .then((res) => {
                     if (res.ok) {
                         setUser(res.data.user);

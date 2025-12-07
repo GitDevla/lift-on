@@ -1,5 +1,5 @@
-import { use, useContext, useEffect, useState } from "react";
-import { Backend } from "@/client/lib/backend";
+import { useEffect, useState } from "react";
+import ExerciseBackend from "@/client/lib/backend/ExerciseBackend";
 import {
     Button,
     Form,
@@ -12,7 +12,6 @@ import {
     ModalHeader,
     Textarea,
 } from "@/client/lib/heroui";
-import type { Exercise } from "@/server/generated/prisma/client";
 import type { ExerciseWithRelations } from "@/server/model/ExerciseModel";
 import EquipmentGroupSelector from "../selector/EquipmentGroupSelector";
 import MuscleGroupSelector from "../selector/MuscleGroupSelector";
@@ -62,7 +61,7 @@ export default function EditExerciseModal({
         console.log("Submitting exercise:", exerciseState);
         if (exerciseState.id === -1) {
             // New exercise
-            const res = await Backend.createExercise(exerciseState);
+            const res = await ExerciseBackend.create(exerciseState);
             if (res.ok) {
                 onOpenChange();
             } else {
@@ -70,7 +69,7 @@ export default function EditExerciseModal({
             }
             return;
         }
-        const res = await Backend.updateExercise(exerciseState);
+        const res = await ExerciseBackend.update(exerciseState);
         if (res.ok) {
             onOpenChange();
         } else {

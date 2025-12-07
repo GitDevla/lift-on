@@ -1,7 +1,8 @@
 "use client";
-import { addToast, image } from "@heroui/react";
-import { use, useEffect, useState } from "react";
-import { Backend } from "@/client/lib/backend";
+import { addToast } from "@heroui/react";
+import { useEffect, useState } from "react";
+import ExerciseBackend from "@/client/lib/backend/ExerciseBackend";
+import WorkoutBackend from "@/client/lib/backend/WorkoutBackend";
 import type { Exercise } from "@/server/generated/prisma/client";
 import type { SetType } from "@/server/generated/prisma/enums";
 import {
@@ -22,7 +23,7 @@ export default function WorkoutProvider({
     const [currentWorkout, setCurrentWorkout] = useState<Workout | null>(null);
     const [readonly, setReadonly] = useState<boolean>(data !== undefined);
     const startWorkout = async () => {
-        const serverWorkout = await Backend.startNewWorkout();
+        const serverWorkout = await WorkoutBackend.startNewWorkout();
         if (!serverWorkout.ok) {
             throw new Error("Failed to start new workout");
         }
@@ -33,7 +34,7 @@ export default function WorkoutProvider({
                     "You have an unfinished workout. Resuming your previous session.",
                 color: "warning",
             });
-            const existingWorkout = await Backend.getWorkoutById(
+            const existingWorkout = await WorkoutBackend.fetchByID(
                 serverWorkout.data.workout.id,
             );
             if (!existingWorkout.ok) {
@@ -63,7 +64,7 @@ export default function WorkoutProvider({
                 });
             });
             setCurrentWorkout(updatedWorkout);
-            await Backend.updateWorkout(updatedWorkout);
+            await WorkoutBackend.update(updatedWorkout);
             setReadonly(true);
         }
     };
@@ -71,7 +72,7 @@ export default function WorkoutProvider({
         if (currentWorkout?.exercises.find((ex) => ex.id === exercise.id)) {
             return;
         }
-        const previousSetsResponse = await Backend.getUserStatForExercise(
+        const previousSetsResponse = await ExerciseBackend.getUserStat(
             exercise.id,
         );
         let previousSets: SetInExercise[] | undefined;
@@ -232,7 +233,7 @@ export default function WorkoutProvider({
     useEffect(() => {
         const interval = setInterval(async () => {
             if (currentWorkout && !readonly) {
-                await Backend.updateWorkout(currentWorkout);
+                await WorkoutBackend.update(currentWorkout);
             }
         }, 10000);
 

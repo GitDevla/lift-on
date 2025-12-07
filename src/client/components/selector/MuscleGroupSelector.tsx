@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Backend } from "@/client/lib/backend";
+import ExerciseBackend from "@/client/lib/backend/ExerciseBackend";
 import { Select, SelectItem } from "@/client/lib/heroui";
 
 export default function MuscleGroupSelector({
@@ -14,7 +14,7 @@ export default function MuscleGroupSelector({
     >([]);
 
     useEffect(() => {
-        Backend.getMuscles().then((res) => {
+        ExerciseBackend.fetchMuscles().then((res) => {
             if (res.ok) {
                 setMuscleGroups(res.data);
             } else {
@@ -32,7 +32,9 @@ export default function MuscleGroupSelector({
             isClearable
         >
             {muscleGroups.map((mg) => (
-                <SelectItem key={mg.id.toString()} className="capitalize">{mg.name}</SelectItem>
+                <SelectItem key={mg.id.toString()} className="capitalize">
+                    {mg.name}
+                </SelectItem>
             ))}
         </Select>
     );

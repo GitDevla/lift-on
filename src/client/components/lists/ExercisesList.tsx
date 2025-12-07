@@ -1,9 +1,8 @@
 "use client";
-import { use, useCallback, useEffect, useRef, useState } from "react";
-import { is } from "zod/locales";
+import { useCallback, useEffect, useRef, useState } from "react";
 import ExerciseCard from "@/client/components/cards/ExerciseCard";
 import MuscleGroupSelector from "@/client/components/selector/MuscleGroupSelector";
-import { Backend } from "@/client/lib/backend";
+import ExerciseBackend from "@/client/lib/backend/ExerciseBackend";
 import { Input } from "@/client/lib/heroui";
 import type { ExerciseWithRelations } from "@/server/model/ExerciseModel";
 import ExecuteWhenOnScreen from "../atoms/ExecuteWhenOnScreen";
@@ -29,7 +28,7 @@ export default function ExercisesList({
     const freshSearch = () => {
         page.current = 1;
         isLoading.current = true;
-        Backend.getExercises({
+        ExerciseBackend.fetch({
             muscleGroupIDs: muscleGroupFilter,
             nameQuery: nameQuery,
             page: page.current,
@@ -60,7 +59,7 @@ export default function ExercisesList({
         }
         isLoading.current = true;
         page.current += 1;
-        Backend.getExercises({
+        ExerciseBackend.fetch({
             muscleGroupIDs: muscleGroupFilter,
             nameQuery: nameQuery,
             page: page.current,

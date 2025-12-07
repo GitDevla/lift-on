@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Backend } from "@/client/lib/backend";
+import ExerciseBackend from "@/client/lib/backend/ExerciseBackend";
 import {
     Button,
     Chip,
@@ -43,7 +43,7 @@ export default function ExerciseModal({
             return;
         }
         if (loggedIn) {
-            Backend.getUserStatForExercise(exercise.id).then((response) => {
+            ExerciseBackend.getUserStat(exercise.id).then((response) => {
                 if (response.ok) {
                     setUserStats(response.data);
                 }

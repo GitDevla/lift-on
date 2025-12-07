@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "@/client/components/contexts/AuthContext";
 import type { Workout } from "@/client/components/contexts/WorkoutContext";
 import CollapsedWorkoutModal from "@/client/components/modal/CollapsedWorkoutModal";
-import { Backend } from "@/client/lib/backend";
+import WorkoutBackend from "@/client/lib/backend/WorkoutBackend";
 import { forceAuthenticated } from "@/client/lib/ForceAuthenticated";
 import {
     Button,
@@ -21,7 +21,7 @@ export default function MePage() {
     const [workouts, setWorkouts] = useState<Workout[]>([]);
 
     useEffect(() => {
-        Backend.getMyWorkouts(1, 10).then((response) => {
+        WorkoutBackend.getUsers(1, 10).then((response) => {
             if (response.ok) {
                 setWorkouts(response.data.workouts);
             }
@@ -80,7 +80,7 @@ export default function MePage() {
                                                                     className="text-danger"
                                                                     color="danger"
                                                                     onPress={() => {
-                                                                        Backend.deleteWorkout(workout.id);
+                                                                        WorkoutBackend.delete(workout.id);
                                                                     }}
                                                                 >
                                                                     Delete Workout

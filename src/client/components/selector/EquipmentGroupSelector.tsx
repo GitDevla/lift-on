@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Backend } from "@/client/lib/backend";
+import ExerciseBackend from "@/client/lib/backend/ExerciseBackend";
 import { Select, SelectItem } from "@/client/lib/heroui";
 
 export default function EquipmentGroupSelector({
@@ -14,7 +14,7 @@ export default function EquipmentGroupSelector({
     >([]);
 
     useEffect(() => {
-        Backend.getEquipment().then((res) => {
+        ExerciseBackend.fetchEquipment().then((res) => {
             if (res.ok) {
                 setEquipmentGroups(res.data);
             } else {
@@ -31,7 +31,9 @@ export default function EquipmentGroupSelector({
             isClearable
         >
             {equipmentGroups.map((mg) => (
-                <SelectItem key={mg.id.toString()} className="capitalize">{mg.name}</SelectItem>
+                <SelectItem key={mg.id.toString()} className="capitalize">
+                    {mg.name}
+                </SelectItem>
             ))}
         </Select>
     );
