@@ -5,9 +5,11 @@ import { Select, SelectItem } from "@/client/lib/heroui";
 export default function EquipmentGroupSelector({
     value,
     onChange,
+    overrideHint,
 }: {
     value: string[];
     onChange: (newValue: string[]) => void;
+    overrideHint?: string;
 }) {
     const [equipmentGroups, setEquipmentGroups] = useState<
         Array<{ id: number; name: string }>
@@ -25,7 +27,7 @@ export default function EquipmentGroupSelector({
     return (
         <Select
             label="Equipment"
-            placeholder="Filter by Equipments"
+            placeholder={overrideHint || "Filter by Equipments"}
             selectedKeys={value}
             onSelectionChange={(keys) => onChange(Array.from(keys) as string[])}
             isClearable

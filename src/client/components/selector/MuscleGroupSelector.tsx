@@ -5,9 +5,11 @@ import { Select, SelectItem } from "@/client/lib/heroui";
 export default function MuscleGroupSelector({
     value,
     onChange,
+    overrideHint,
 }: {
     value: string[];
     onChange: (newValue: string[]) => void;
+    overrideHint?: string;
 }) {
     const [muscleGroups, setMuscleGroups] = useState<
         Array<{ id: number; name: string }>
@@ -26,7 +28,7 @@ export default function MuscleGroupSelector({
         <Select
             label="Muscles"
             selectionMode="multiple"
-            placeholder="Filter by Muscles"
+            placeholder={overrideHint || "Filter by Muscles"}
             selectedKeys={value}
             onSelectionChange={(keys) => onChange(Array.from(keys) as string[])}
             isClearable
