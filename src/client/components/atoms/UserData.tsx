@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import AuthBackend from "@/client/lib/backend/AuthBackend";
-import { Button } from "@/client/lib/heroui";
+import { addToast, Button } from "@/client/lib/heroui";
 import { AuthContext } from "../contexts/AuthContext";
 import ConfirmationModal from "../modal/ConfirmationModal";
 
@@ -9,6 +9,24 @@ export default function UserData() {
 
     if (!authContext.user) {
         return <p>No user data available.</p>;
+    }
+
+    const handleDeleteAccount = async () => {
+        const res = await AuthBackend.deleteCurrentUser();
+        if (res.ok) {
+            addToast({
+                title: "Account Deleted",
+                description: "Your account has been successfully deleted.",
+                color: "success",
+            });
+            authContext.logout();
+        } else {
+            addToast({
+                title: "Error",
+                description: "Failed to delete account.",
+                color: "danger",
+            });
+        }
     }
 
     return (
@@ -25,7 +43,7 @@ export default function UserData() {
             <ConfirmationModal
                 title="Delete Account"
                 message="Are you sure you want to delete your account? This action cannot be undone."
-                onConfirm={() => AuthBackend.deleteCurrentUser()}
+                onConfirm={handleDeleteAccount}
                 trigger={(onOpen) => <Button color="danger" onPress={onOpen}>Delete Account</Button>}
             />
         </div>
