@@ -1,31 +1,16 @@
 "use client";
-import {
-    addToast,
-    Button,
-    Divider,
-    useDisclosure,
-} from "@heroui/react";
-import { useRouter } from "next/navigation";
-import { useContext, useState } from "react";
-import { AuthContext } from "@/client/components/contexts/AuthContext";
+import { Button, Divider, useDisclosure } from "@heroui/react";
+import { useState } from "react";
 import ExercisesList from "@/client/components/lists/ExercisesList";
 import EditExerciseModal from "@/client/components/modal/EditExerciseModal";
+import ForceRole from "@/client/lib/ForceRole";
 import type { ExerciseWithRelations } from "@/server/model/ExerciseModel";
 
 export default function AdminPage() {
     const disclosure = useDisclosure();
     const [selectedExercise, setSelectedExercise] =
         useState<ExerciseWithRelations | null>(null);
-    const authContext = useContext(AuthContext);
-    const router = useRouter();
-    if (!authContext.loading && authContext.user?.role !== "ADMIN") {
-        addToast({
-            title: "Access Denied",
-            description: "You do not have permission to access the admin panel.",
-            color: "danger",
-        });
-        router.push("/");
-    }
+    ForceRole("ADMIN");
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">

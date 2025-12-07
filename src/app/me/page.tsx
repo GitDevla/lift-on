@@ -1,12 +1,11 @@
 "use client";
-import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "@/client/components/contexts/AuthContext";
 import type { Workout } from "@/client/components/contexts/WorkoutContext";
 import CollapsedWorkoutModal from "@/client/components/modal/CollapsedWorkoutModal";
 import { Backend } from "@/client/lib/backend";
+import { forceAuthenticated } from "@/client/lib/ForceAuthenticated";
 import {
-    addToast,
     Button,
     Dropdown,
     DropdownItem,
@@ -16,15 +15,8 @@ import {
 
 export default function MePage() {
     const authContext = useContext(AuthContext);
-    const router = useRouter();
 
-    if (!authContext.loading && !authContext.user) {
-        addToast({
-            title: "You must be logged in to access your profile.",
-            color: "warning",
-        });
-        router.push("/auth");
-    }
+    forceAuthenticated();
 
     const [workouts, setWorkouts] = useState<Workout[]>([]);
 

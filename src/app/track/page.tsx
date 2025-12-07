@@ -1,22 +1,11 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { useContext } from "react";
-import { AuthContext } from "@/client/components/contexts/AuthContext";
 import WorkoutForm from "@/client/components/forms/WorkoutForm";
 import WorkoutProvider from "@/client/components/providers/WorkoutProvider";
-import { addToast, Divider } from "@/client/lib/heroui";
+import { forceAuthenticated } from "@/client/lib/ForceAuthenticated";
+import { Divider } from "@/client/lib/heroui";
 
 export default function TrackPage() {
-    const authContext = useContext(AuthContext);
-    const router = useRouter();
-
-    if (!authContext.loading && !authContext.user) {
-        addToast({
-            title: "You must be logged in to access the track page.",
-            color: "warning",
-        });
-        router.push("/auth");
-    }
+    forceAuthenticated();
 
     return (
         <div className="space-y-6">
