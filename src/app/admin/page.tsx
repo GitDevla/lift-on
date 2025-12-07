@@ -1,6 +1,7 @@
 "use client";
 import { Button, Divider, useDisclosure } from "@heroui/react";
 import { useState } from "react";
+import HeroText from "@/client/components/layout/HeroText";
 import ExercisesList from "@/client/components/lists/ExercisesList";
 import EditExerciseModal from "@/client/components/modal/EditExerciseModal";
 import ForceRole from "@/client/lib/ForceRole";
@@ -13,12 +14,10 @@ export default function AdminPage() {
     ForceRole("ADMIN");
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-                    <p className="text-gray-400 mt-1">Manage exercises and app content</p>
-                </div>
-            </div>
+            <HeroText
+                title="Admin Dashboard"
+                subtitle="Manage exercises and app content"
+            />
 
             <Divider />
 

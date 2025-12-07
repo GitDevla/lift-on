@@ -1,103 +1,23 @@
 "use client";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "@/client/components/contexts/AuthContext";
-import type { Workout } from "@/client/components/contexts/WorkoutContext";
-import CollapsedWorkoutModal from "@/client/components/modal/CollapsedWorkoutModal";
-import WorkoutBackend from "@/client/lib/backend/WorkoutBackend";
+import UserData from "@/client/components/atoms/UserData";
+import UsersWorkoutsList from "@/client/components/atoms/UsersWorkoutsList";
+import HeroText from "@/client/components/layout/HeroText";
 import { forceAuthenticated } from "@/client/lib/ForceAuthenticated";
-import {
-    Button,
-    Dropdown,
-    DropdownItem,
-    DropdownMenu,
-    DropdownTrigger,
-} from "@/client/lib/heroui";
+import { Divider } from "@/client/lib/heroui";
 
 export default function MePage() {
-    const authContext = useContext(AuthContext);
-
     forceAuthenticated();
 
-    const [workouts, setWorkouts] = useState<Workout[]>([]);
-
-    useEffect(() => {
-        WorkoutBackend.getUsers(1, 10).then((response) => {
-            if (response.ok) {
-                setWorkouts(response.data.workouts);
-            }
-        });
-    }, []);
-
     return (
-        <div>
-            <h1 className="text-3xl font-bold">My Profile</h1>
-            {authContext.user && (
-                <>
-                    <div className="mt-4">
-                        <p>
-                            <strong>Username:</strong> {authContext.user.username}
-                        </p>
-                        <p>
-                            <strong>Email:</strong> {authContext.user.email}
-                        </p>
-                        <p>
-                            <strong>Role:</strong> {authContext.user.role}
-                        </p>
-                    </div>
-                    <div>
-                        <h2 className="text-2xl font-bold mt-6">My Workouts</h2>
-                        {workouts.length === 0 ? (
-                            <p>No workouts found.</p>
-                        ) : (
-                            <ul className="mt-4 space-y-4">
-                                {workouts.map((workout) => (
-                                    <div key={workout.id}>
-                                        <CollapsedWorkoutModal
-                                            workout={workout}
-                                            trigger={(onOpen) => (
-                                                // biome-ignore lint/a11y/noStaticElementInteractions: <explanation>
-                                                <div
-                                                    className="p-4 border rounded-lg shadow-sm hover:shadow-md cursor-pointer text-left w-full relative"
-                                                    onClick={onOpen}
-                                                    onKeyDown={onOpen}
-                                                >
-                                                    <h3 className="text-lg font-semibold">
-                                                        Workout on{" "}
-                                                        {new Date(workout.startTime).toLocaleDateString()}
-                                                    </h3>
-                                                    <p>
-                                                        {workout.exercises.length} exercise
-                                                        {workout.exercises.length !== 1 ? "s" : ""}
-                                                    </p>
-                                                    <div className="absolute top-2 right-2">
-                                                        <Dropdown>
-                                                            <DropdownTrigger>
-                                                                <Button variant="bordered">Open Menu</Button>
-                                                            </DropdownTrigger>
-                                                            <DropdownMenu>
-                                                                <DropdownItem
-                                                                    key="delete"
-                                                                    className="text-danger"
-                                                                    color="danger"
-                                                                    onPress={() => {
-                                                                        WorkoutBackend.delete(workout.id);
-                                                                    }}
-                                                                >
-                                                                    Delete Workout
-                                                                </DropdownItem>
-                                                            </DropdownMenu>
-                                                        </Dropdown>
-                                                    </div>
-                                                </div>
-                                            )}
-                                        />
-                                    </div>
-                                ))}
-                            </ul>
-                        )}
-                    </div>
-                </>
-            )}
+        <div className="space-y-6">
+            <HeroText
+                title="My Profile"
+                subtitle="View and manage your account details"
+            />
+            <Divider />
+            <UserData />
+            <Divider />
+            <UsersWorkoutsList />
         </div>
     );
 }
