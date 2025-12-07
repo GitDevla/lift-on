@@ -1,10 +1,10 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
-import { AuthContext } from "@/components/contexts/AuthContext";
-import WorkoutForm from "@/components/forms/WorkoutForm";
-import WorkoutProvider from "@/components/providers/WorkoutProvider";
-import { addToast, Divider } from "@/lib/heroui";
+import { AuthContext } from "@/client/components/contexts/AuthContext";
+import WorkoutForm from "@/client/components/forms/WorkoutForm";
+import WorkoutProvider from "@/client/components/providers/WorkoutProvider";
+import { addToast, Divider } from "@/client/lib/heroui";
 
 export default function TrackPage() {
     const authContext = useContext(AuthContext);

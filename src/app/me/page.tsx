@@ -1,11 +1,18 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "@/components/contexts/AuthContext";
-import type { Workout } from "@/components/contexts/WorkoutContext";
-import CollapsedWorkoutModal from "@/components/modal/CollapsedWorkoutModal";
-import { Backend } from "@/lib/backend";
-import { addToast, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@/lib/heroui";
+import { AuthContext } from "@/client/components/contexts/AuthContext";
+import type { Workout } from "@/client/components/contexts/WorkoutContext";
+import CollapsedWorkoutModal from "@/client/components/modal/CollapsedWorkoutModal";
+import { Backend } from "@/client/lib/backend";
+import {
+    addToast,
+    Button,
+    Dropdown,
+    DropdownItem,
+    DropdownMenu,
+    DropdownTrigger,
+} from "@/client/lib/heroui";
 
 export default function MePage() {
     const authContext = useContext(AuthContext);
@@ -76,7 +83,10 @@ export default function MePage() {
                                                                 <Button variant="bordered">Open Menu</Button>
                                                             </DropdownTrigger>
                                                             <DropdownMenu>
-                                                                <DropdownItem key="delete" className="text-danger" color="danger"
+                                                                <DropdownItem
+                                                                    key="delete"
+                                                                    className="text-danger"
+                                                                    color="danger"
                                                                     onPress={() => {
                                                                         Backend.deleteWorkout(workout.id);
                                                                     }}

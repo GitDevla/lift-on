@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
-import { Role } from "@/generated/prisma/enums";
-import prisma from "@/lib/prisma";
-import HashService from "@/service/HashService";
+import { Role } from "@/server/generated/prisma/enums";
+import prisma from "@/server/lib/prisma";
+import HashService from "@/server/service/HashService";
 
 dotenv.config();
 

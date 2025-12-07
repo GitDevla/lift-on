@@ -1,14 +1,14 @@
 import type { NextRequest } from "next/server";
-import { adminMiddleware } from "@/lib/adminMiddleware";
-import { forceAuthMiddleware } from "@/lib/authMiddleware";
-import { errorMiddleware } from "@/lib/errorMiddleware";
-import prisma from "@/lib/prisma";
+import { adminMiddleware } from "@/server/lib/adminMiddleware";
+import { forceAuthMiddleware } from "@/server/lib/authMiddleware";
+import { errorMiddleware } from "@/server/lib/errorMiddleware";
+import prisma from "@/server/lib/prisma";
 import {
     ExerciseModel,
     type ExerciseWithRelations,
-} from "@/model/ExerciseModel";
-import { ImageModel } from "@/model/ImageModel";
-import ExerciseService from "@/service/ExerciseService";
+} from "@/server/model/ExerciseModel";
+import { ImageModel } from "@/server/model/ImageModel";
+import ExerciseService from "@/server/service/ExerciseService";
 
 async function get_handler(req: NextRequest) {
     const { searchParams } = new URL(req.url);

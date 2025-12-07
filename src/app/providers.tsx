@@ -1,13 +1,11 @@
-import AuthProvider from "@/components/providers/AuthProvider";
-import { HeroUIProvider, ToastProvider } from "@/lib/heroui";
+import AuthProvider from "@/client/components/providers/AuthProvider";
+import { HeroUIProvider, ToastProvider } from "@/client/lib/heroui";
 
 export function Providers({ children }: { children: React.ReactNode }) {
     return (
         <HeroUIProvider>
             <ToastProvider />
-            <AuthProvider>
-                {children}
-            </AuthProvider>
+            <AuthProvider>{children}</AuthProvider>
         </HeroUIProvider>
-    )
+    );
 }

@@ -1,10 +1,10 @@
 import type { NextRequest } from "next/server";
-import type { Workout } from "@/components/contexts/WorkoutContext";
-import { forceAuthMiddleware, type RequestContext } from "@/lib/authMiddleware";
-import { BadRequestError, errorMiddleware, NotFoundError, UnauthorizedError } from "@/lib/errorMiddleware";
-import { getUser } from "@/lib/getUser";
-import { WorkoutModel } from "@/model/WorkoutModel";
-import { WorkoutService } from "@/service/WorkoutService";
+import type { Workout } from "@/client/components/contexts/WorkoutContext";
+import { forceAuthMiddleware, type RequestContext } from "@/server/lib/authMiddleware";
+import { BadRequestError, errorMiddleware, NotFoundError, UnauthorizedError } from "@/server/lib/errorMiddleware";
+import { getUser } from "@/server/lib/getUser";
+import { WorkoutModel } from "@/server/model/WorkoutModel";
+import { WorkoutService } from "@/server/service/WorkoutService";
 
 async function post_handler(req: NextRequest, ctx: RequestContext) {
     const userID = ctx.user.id;

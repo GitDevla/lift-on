@@ -2,7 +2,7 @@
 import { Button } from "@heroui/react";
 import Link from "next/link";
 import { useContext } from "react";
-import { AuthContext } from "@/components/contexts/AuthContext";
+import { AuthContext } from "@/client/components/contexts/AuthContext";
 
 export default function Home() {
   const authContext = useContext(AuthContext);

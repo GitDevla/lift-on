@@ -1,10 +1,10 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
-import { AuthContext } from "@/components/contexts/AuthContext";
-import LoginForm from "@/components/forms/LoginForm";
-import RegisterForm from "@/components/forms/RegisterForm";
-import { Card, CardBody, CardHeader, Divider, Link } from "@/lib/heroui";
+import { AuthContext } from "@/client/components/contexts/AuthContext";
+import LoginForm from "@/client/components/forms/LoginForm";
+import RegisterForm from "@/client/components/forms/RegisterForm";
+import { Card, CardBody, CardHeader, Divider, Link } from "@/client/lib/heroui";
 
 export default function AuthPage() {
     const authContext = useContext(AuthContext);
@@ -18,9 +18,13 @@ export default function AuthPage() {
         <div className="flex justify-center">
             <Card className="max-w-md w-full">
                 <CardHeader className="flex flex-col gap-1 px-6 pt-6">
-                    <h1 className="text-2xl font-bold">{isLogin ? "Welcome Back" : "Create Account"}</h1>
+                    <h1 className="text-2xl font-bold">
+                        {isLogin ? "Welcome Back" : "Create Account"}
+                    </h1>
                     <p className="text-sm text-gray-400">
-                        {isLogin ? "Log in to track your workouts" : "Sign up to get started"}
+                        {isLogin
+                            ? "Log in to track your workouts"
+                            : "Sign up to get started"}
                     </p>
                 </CardHeader>
                 <Divider />
@@ -28,7 +32,9 @@ export default function AuthPage() {
                     {isLogin ? <LoginForm /> : <RegisterForm />}
                     <div className="text-center text-sm">
                         <span className="text-gray-400">
-                            {isLogin ? "Don't have an account? " : "Already have an account? "}
+                            {isLogin
+                                ? "Don't have an account? "
+                                : "Already have an account? "}
                         </span>
                         <Link
                             className="cursor-pointer"

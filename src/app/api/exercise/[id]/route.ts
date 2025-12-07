@@ -1,9 +1,9 @@
 import type { NextRequest } from "next/server";
-import { adminMiddleware } from "@/lib/adminMiddleware";
-import { forceAuthMiddleware, type RequestContext } from "@/lib/authMiddleware";
-import { errorMiddleware } from "@/lib/errorMiddleware";
-import type { ExerciseWithRelations } from "@/model/ExerciseModel";
-import ExerciseService from "@/service/ExerciseService";
+import { adminMiddleware } from "@/server/lib/adminMiddleware";
+import { forceAuthMiddleware, type RequestContext } from "@/server/lib/authMiddleware";
+import { errorMiddleware } from "@/server/lib/errorMiddleware";
+import type { ExerciseWithRelations } from "@/server/model/ExerciseModel";
+import ExerciseService from "@/server/service/ExerciseService";
 
 async function put_handler(
     req: NextRequest,

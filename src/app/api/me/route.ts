@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { forceAuthMiddleware, type RequestContext } from "@/lib/authMiddleware";
-import { errorMiddleware, NotFoundError } from "@/lib/errorMiddleware";
-import { UserModel } from "@/model/UserModel";
+import { forceAuthMiddleware, type RequestContext } from "@/server/lib/authMiddleware";
+import { errorMiddleware, NotFoundError } from "@/server/lib/errorMiddleware";
+import { UserModel } from "@/server/model/UserModel";
 
 async function get_handler(req: NextRequest, ctx: RequestContext) {
     const userID = ctx.user.id;

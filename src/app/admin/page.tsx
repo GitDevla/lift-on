@@ -7,10 +7,10 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
-import { AuthContext } from "@/components/contexts/AuthContext";
-import ExercisesList from "@/components/lists/ExercisesList";
-import EditExerciseModal from "@/components/modal/EditExerciseModal";
-import type { ExerciseWithRelations } from "@/model/ExerciseModel";
+import { AuthContext } from "@/client/components/contexts/AuthContext";
+import ExercisesList from "@/client/components/lists/ExercisesList";
+import EditExerciseModal from "@/client/components/modal/EditExerciseModal";
+import type { ExerciseWithRelations } from "@/server/model/ExerciseModel";
 
 export default function AdminPage() {
     const disclosure = useDisclosure();

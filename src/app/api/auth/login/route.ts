@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { BadRequestError, errorMiddleware, UnauthorizedError } from "@/lib/errorMiddleware";
-import AuthService from "@/service/AuthService";
-import JWTService from "@/service/JWTService";
+import { BadRequestError, errorMiddleware, UnauthorizedError } from "@/server/lib/errorMiddleware";
+import AuthService from "@/server/service/AuthService";
+import JWTService from "@/server/service/JWTService";
 import { loginSchema } from "@/validation/AuthSchema";
 
 async function post_handler(req: NextRequest, ctx: any) {

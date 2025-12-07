@@ -1,5 +1,5 @@
 import type { NextRequest } from "next/server";
-import prisma from "@/lib/prisma";
+import prisma from "@/server/lib/prisma";
 
 async function get_handler(req: NextRequest) {
     const equipmentGroups = await prisma.equipment.findMany();

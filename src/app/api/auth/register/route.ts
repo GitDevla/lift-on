@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { BadRequestError, errorMiddleware } from "@/lib/errorMiddleware";
-import { UserService } from "@/service/UserService";
+import { BadRequestError, errorMiddleware } from "@/server/lib/errorMiddleware";
+import { UserService } from "@/server/service/UserService";
 import { registerSchema } from "@/validation/AuthSchema";
 
 async function post_handler(req: NextRequest) {

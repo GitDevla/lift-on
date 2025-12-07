@@ -1,8 +1,8 @@
 import type { NextRequest } from "next/server";
-import type { Workout } from "@/components/contexts/WorkoutContext";
-import { forceAuthMiddleware, type RequestContext } from "@/lib/authMiddleware";
-import { errorMiddleware, UnauthorizedError } from "@/lib/errorMiddleware";
-import { UserService } from "@/service/UserService";
+import type { Workout } from "@/client/components/contexts/WorkoutContext";
+import { forceAuthMiddleware, type RequestContext } from "@/server/lib/authMiddleware";
+import { errorMiddleware, UnauthorizedError } from "@/server/lib/errorMiddleware";
+import { UserService } from "@/server/service/UserService";
 
 async function get_handler(req: NextRequest, ctx: RequestContext) {
     const user = ctx.user;
