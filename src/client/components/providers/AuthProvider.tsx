@@ -38,7 +38,7 @@ export default function AuthProvider({
         password: string,
         email: string,
     ) => {
-        const register = await AuthBackend.register(username, password, email);
+        const register = await AuthBackend.register(username, email, password);
         if (!register.ok) {
             throw new Error(register.error);
         }
