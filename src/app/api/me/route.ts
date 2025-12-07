@@ -20,4 +20,11 @@ async function get_handler(req: NextRequest, ctx: RequestContext) {
     return NextResponse.json({ user: safeUser });
 }
 
+async function delete_handler(req: NextRequest, ctx: RequestContext) {
+    const userID = ctx.user.id;
+    await UserModel.deleteById(userID as unknown as string);
+    return NextResponse.json({ message: "User deleted successfully" });
+}
+
 export const GET = errorMiddleware(forceAuthMiddleware(get_handler));
+export const DELETE = errorMiddleware(forceAuthMiddleware(delete_handler));

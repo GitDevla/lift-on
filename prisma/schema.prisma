@@ -78,7 +78,7 @@ model Workout {
   userId           String
   startedAt        DateTime          @default(now())
   endedAt          DateTime?
-  user             User              @relation(fields: [userId], references: [id])
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   WorkoutExercises WorkoutExercise[]
 }
 

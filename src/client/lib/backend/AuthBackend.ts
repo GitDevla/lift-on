@@ -28,4 +28,8 @@ export default class AuthBackend extends Backend {
     static async getCurrentUser(): Promise<BackendResponse<{ user: User }>> {
         return Backend.GET<{ user: User }>("/api/me");
     }
+
+    static async deleteCurrentUser(): Promise<BackendResponse<{ message: string }>> {
+        return Backend.DELETE<{ message: string }>("/api/me");
+    }
 }

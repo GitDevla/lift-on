@@ -29,6 +29,12 @@ export class UserModel {
         });
     }
 
+    static async deleteById(id: string) {
+        return prisma.user.delete({
+            where: { id },
+        });
+    }
+
     static async getWorkouts(userId: string, page: number, pageSize: number) {
         return prisma.workout.findMany({
             where: { userId },
