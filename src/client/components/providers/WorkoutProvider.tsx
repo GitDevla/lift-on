@@ -54,7 +54,7 @@ export default function WorkoutProvider({
         if (currentWorkout) {
             const updatedWorkout = {
                 ...currentWorkout,
-                endTime: editable ? new Date() : currentWorkout.endTime,
+                endTime: editable === true ? currentWorkout.endTime : new Date(),
             };
             currentWorkout.exercises.forEach((exercise, exIndex) => {
                 exercise.sets.forEach((set, setIndex) => {
