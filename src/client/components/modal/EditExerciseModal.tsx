@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ExerciseBackend from "@/client/lib/backend/ExerciseBackend";
 import {
+    addToast,
     Button,
     Form,
     Image,
@@ -57,16 +58,26 @@ export default function EditExerciseModal({
             const res = await ExerciseBackend.create(exerciseState);
             if (res.ok) {
                 onOpenChange();
+                addToast({
+                    title: "Exercise created successfully", color: "success", description:
+                        "Please refresh the page to see the new exercise."
+                });
+                exercise = res.data;
             } else {
-                console.error("Failed to create exercise:", res.error);
+                addToast({ title: "Failed to create exercise", color: "warning" });
             }
             return;
         }
         const res = await ExerciseBackend.update(exerciseState);
         if (res.ok) {
             onOpenChange();
+            addToast({
+                title: "Exercise updated successfully", color: "success", description:
+                    "Please refresh the page to see the updated exercise."
+            });
+            exercise = res.data;
         } else {
-            console.error("Failed to update exercise:", res.error);
+            addToast({ title: "Failed to update exercise", color: "warning" });
         }
     };
 
