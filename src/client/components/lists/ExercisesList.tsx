@@ -5,6 +5,7 @@ import MuscleGroupSelector from "@/client/components/selector/MuscleGroupSelecto
 import ExerciseBackend from "@/client/lib/backend/ExerciseBackend";
 import { Input } from "@/client/lib/heroui";
 import type { ExerciseWithRelations } from "@/server/model/ExerciseModel";
+import Collapsable from "../atoms/Collapsable";
 import ExecuteWhenOnScreen from "../atoms/ExecuteWhenOnScreen";
 import EquipmentGroupSelector from "../selector/EquipmentGroupSelector";
 
@@ -90,20 +91,24 @@ export default function ExercisesList({
 
     return (
         <div className="@container">
-            <div className="grid grid-cols-3 gap-4 mb-5">
+            <div className="grid grid-cols-1 gap-4 mb-5">
                 <Input
                     label="Search Exercises"
                     value={nameQuery}
                     onValueChange={setNameQuery}
                 />
-                <MuscleGroupSelector
-                    value={muscleGroupFilter}
-                    onChange={setMuscleGroupFilter}
-                />
-                <EquipmentGroupSelector
-                    value={equipmentGroupFilter}
-                    onChange={setEquipmentGroupFilter}
-                />
+                <Collapsable title="Additional Filters">
+                    <div className="flex flex-col gap-4 mt-4">
+                        <MuscleGroupSelector
+                            value={muscleGroupFilter}
+                            onChange={setMuscleGroupFilter}
+                        />
+                        <EquipmentGroupSelector
+                            value={equipmentGroupFilter}
+                            onChange={setEquipmentGroupFilter}
+                        />
+                    </div>
+                </Collapsable>
             </div>
             <div className="grid grid-cols-1 @lg:grid-cols-4 gap-4">
                 {shownExercises.map((exercise) => (
