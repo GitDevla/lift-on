@@ -47,7 +47,7 @@ export class Backend {
         }
         let json: any;
         try {
-            json = await res.json();
+            json = res.status === 204 ? null : await res.json();
         } catch (error) {
             return {
                 ok: false,
