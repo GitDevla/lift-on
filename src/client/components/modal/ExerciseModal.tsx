@@ -110,7 +110,14 @@ export default function ExerciseModal({
                                 <div className="mt-4 text-sm text-gray-500 italic">
                                     <h4>Your Progress with this Exercise:</h4>
                                     <div>
-                                        <OneRepMaxGraph stats={userStats?.stats || []} />
+                                        {userStats && userStats.stats.length > 1 ? (
+                                            <OneRepMaxGraph stats={userStats?.stats || []} />
+                                        ) : (
+                                            <div>
+                                                You need to log at least 2 sets of this exercise to
+                                                see your progress graph.
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             ) : (
