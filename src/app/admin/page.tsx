@@ -1,6 +1,6 @@
 "use client";
 import { Button, Divider, useDisclosure } from "@heroui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HeroText from "@/client/components/layout/HeroText";
 import ExercisesList from "@/client/components/lists/ExercisesList";
 import EditExerciseModal from "@/client/components/modal/EditExerciseModal";
@@ -12,6 +12,12 @@ export default function AdminPage() {
     const [selectedExercise, setSelectedExercise] =
         useState<ExerciseWithRelations | null>(null);
     ForceRole("ADMIN");
+
+    useEffect(() => {
+        if (!disclosure.isOpen)
+            setSelectedExercise(null);
+    }, [disclosure.isOpen]);
+
     return (
         <div className="space-y-6">
             <HeroText
