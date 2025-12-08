@@ -17,16 +17,28 @@ export default function WorkoutForm() {
                         Start New Workout
                     </Button>
                 ) : (
-                    <ConfirmationModal
-                        title="Confirm End Workout"
-                        message="You really wanna end this workout? This action will set all incomplete sets as done."
-                        onConfirm={() => workoutContext.endWorkout()}
-                        trigger={(open) => (
-                            <Button color="danger" onPress={open}>
-                                End Workout
-                            </Button>
-                        )}
-                    ></ConfirmationModal>
+                    <>
+                        <ConfirmationModal
+                            title="Confirm End Workout"
+                            message="You really wanna end this workout? This action will set all incomplete sets as done."
+                            onConfirm={() => workoutContext.endWorkout()}
+                            trigger={(open) => (
+                                <Button color="danger" onPress={open}>
+                                    End Workout
+                                </Button>
+                            )}
+                        ></ConfirmationModal>
+                        <ConfirmationModal
+                            title="Confirm Cancel Workout"
+                            message="Are you sure you want to cancel this workout? All progress will be lost."
+                            onConfirm={() => workoutContext.cancelWorkout()}
+                            trigger={(open) => (
+                                <Button variant="bordered" color="danger" onPress={open}>
+                                    Cancel Workout
+                                </Button>
+                            )}
+                        ></ConfirmationModal>
+                    </>
                 ))}
             {workoutContext.currentWorkout && (
                 <div className="my-4">

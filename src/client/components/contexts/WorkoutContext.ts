@@ -55,6 +55,7 @@ export const WorkoutContext = createContext<{
     moveExerciseUp: (exerciseId: number) => Promise<void>;
     moveExerciseDown: (exerciseId: number) => Promise<void>;
     setEditable: (isEditable: boolean) => void;
+    cancelWorkout: () => Promise<void>;
 }>({
     currentWorkout: null,
     readonly: false,
@@ -88,4 +89,7 @@ export const WorkoutContext = createContext<{
     setEditable: () => {
         console.log("setEditable function not implemented");
     },
+    cancelWorkout: async () => {
+        console.log("cancelWorkout function not implemented");
+    }
 });

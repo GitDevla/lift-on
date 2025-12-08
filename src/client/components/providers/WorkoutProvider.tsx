@@ -230,6 +230,12 @@ export default function WorkoutProvider({
         }
     };
 
+    const cancelWorkout = async () => {
+        setCurrentWorkout(null);
+        setReadonly(false);
+        await WorkoutBackend.delete(currentWorkout?.id ?? -1);
+    }
+
     useEffect(() => {
         const interval = setInterval(async () => {
             if (currentWorkout && !readonly) {
@@ -267,6 +273,7 @@ export default function WorkoutProvider({
                 moveExerciseUp,
                 moveExerciseDown,
                 setEditable,
+                cancelWorkout,
             }}
         >
             {children}
