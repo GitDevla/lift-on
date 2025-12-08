@@ -37,7 +37,7 @@ export class UserModel {
 
     static async getWorkouts(userId: string, page: number, pageSize: number) {
         return prisma.workout.findMany({
-            where: { userId },
+            where: { userId: userId, endedAt: { not: null } },
             skip: (page - 1) * pageSize,
             take: pageSize,
             include: {
