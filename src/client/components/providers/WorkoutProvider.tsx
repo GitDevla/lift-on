@@ -52,6 +52,20 @@ export default function WorkoutProvider({
     };
     const endWorkout = async () => {
         if (currentWorkout) {
+            for (const exercise of currentWorkout.exercises) {
+                for (const set of exercise.sets) {
+                    if (set.reps === 0) {
+                        addToast({
+                            title: "Cannot End Workout",
+                            description:
+                                "Please ensure all sets have more than 0 reps before ending the workout.",
+                            color: "danger",
+                        });
+                        return;
+                    }
+                }
+            }
+
             const updatedWorkout = {
                 ...currentWorkout,
                 endTime: editable === true ? currentWorkout.endTime : new Date(),
