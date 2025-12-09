@@ -103,6 +103,8 @@ export default function ExerciseModal({
                                     alt={exercise.name}
                                     width={180}
                                     height={180}
+                                    className="aspect-square object-contain"
+
                                 />
                             </div>
                             <ul className="mt-4 list-decimal pl-5 space-y-2">

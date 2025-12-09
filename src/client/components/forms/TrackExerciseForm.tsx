@@ -33,6 +33,7 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                         alt={exercise.name}
                         width={180}
                         height={180}
+                        className="aspect-square object-contain"
                     />
                     <h3 className="capitalize text-lg">{exercise.name}</h3>
                     {workoutContext.readonly ? null : (
