@@ -88,7 +88,7 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                             key={set.id}
                             className={cn(
                                 "grid gap-3 items-center justify-items-center p-2  rounded-md relative",
-                                set.done && "bg-green-500",
+                                (set.done && !workoutContext.readonly) && "bg-green-500",
                                 workoutContext.readonly ? "grid-cols-5" : "grid-cols-8",
                             )}
                         >
