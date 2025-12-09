@@ -42,6 +42,8 @@ next-env.d.ts
 
 /src/server/generated/prisma
 dev.db
+/db
 
 public/images
-/db
+Dockerfile
+docker-compose.yml

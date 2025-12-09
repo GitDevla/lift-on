@@ -1,0 +1,14 @@
+services:
+  lifton:
+    image: lift-on:latest
+    container_name: lift-on
+    ports:
+      - 3000:3000
+    volumes:
+      - ./db:/app/db
+      - ./public:/app/public
+    environment:
+      - DATABASE_URL=file:./db/db.db
+      - JWT_SECRET=2Xbr3UUuqJaFDlXEwb9gP6VNJbAc90BQ
+      - DYNAMIC_IMAGES_DIR=public/images/
+    restart: unless-stopped
