@@ -1,18 +1,24 @@
-import type { NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import type { Workout } from "@/client/components/contexts/WorkoutContext";
-import { forceAuthMiddleware, type RequestContext } from "@/server/lib/authMiddleware";
-import { BadRequestError, errorMiddleware, NotFoundError, UnauthorizedError } from "@/server/lib/errorMiddleware";
-import { getUser } from "@/server/lib/getUser";
-import { WorkoutModel } from "@/server/model/WorkoutModel";
+import {
+    forceAuthMiddleware,
+    type RequestContext,
+} from "@/server/lib/authMiddleware";
+import {
+    BadRequestError,
+    errorMiddleware,
+} from "@/server/lib/errorMiddleware";
 import { WorkoutService } from "@/server/service/WorkoutService";
 
 async function post_handler(req: NextRequest, ctx: RequestContext) {
     const userID = ctx.user.id;
-    const newWorkout = await WorkoutService.startNewWorkout(userID as unknown as string);
-    return new Response(JSON.stringify({ workout: newWorkout.workout, new: newWorkout.new }), {
-        status: 201,
-        headers: { "Content-Type": "application/json" },
-    });
+    const newWorkout = await WorkoutService.startNewWorkout(
+        userID as unknown as string,
+    );
+    return NextResponse.json(
+        { workout: newWorkout.workout, new: newWorkout.new },
+        { status: 200 },
+    );
 }
 
 async function patch_handler(req: NextRequest, ctx: RequestContext) {
@@ -23,14 +29,14 @@ async function patch_handler(req: NextRequest, ctx: RequestContext) {
 }
 
 async function get_handler(req: NextRequest, ctx: RequestContext) {
-    const workoutID = req.nextUrl.searchParams.get("workoutID");
-    if (!workoutID)
-        throw new BadRequestError("Missing workoutID parameter.");
+    const rawWorkoutID = req.nextUrl.searchParams.get("workoutID");
+    if (!rawWorkoutID) throw new BadRequestError("Missing workoutID parameter.");
+    const workoutID = parseInt(rawWorkoutID, 10);
+    if (Number.isNaN(workoutID))
+        throw new BadRequestError("Invalid workoutID parameter.");
 
-    const workout = await WorkoutModel.getWorkoutById(parseInt(workoutID, 10));
-    if (!workout) {
-        throw new NotFoundError("Workout not found");
-    }
+    const workout = await WorkoutService.getWorkoutById(workoutID);
+
     const formatedWorkout: Workout = {
         id: workout.id,
         startTime: workout.startedAt,
@@ -49,19 +55,18 @@ async function get_handler(req: NextRequest, ctx: RequestContext) {
             })),
         })),
     };
-    return new Response(JSON.stringify({ workout: formatedWorkout }), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json({ workout: formatedWorkout }, { status: 200 });
 }
 
 async function delete_handler(req: NextRequest, ctx: RequestContext) {
     const workoutID = req.nextUrl.searchParams.get("workoutID");
-    if (!workoutID)
-        throw new BadRequestError("Missing workoutID parameter.");
+    if (!workoutID) throw new BadRequestError("Missing workoutID parameter.");
 
     await WorkoutService.deleteWorkout(parseInt(workoutID, 10));
-    return new Response(null, { status: 204 });
+    return NextResponse.json(
+        { message: "Workout deleted successfully" },
+        { status: 200 },
+    );
 }
 
 export const POST = errorMiddleware(forceAuthMiddleware(post_handler));

@@ -1,7 +1,10 @@
-import type { NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { adminMiddleware } from "@/server/lib/adminMiddleware";
-import { forceAuthMiddleware, type RequestContext } from "@/server/lib/authMiddleware";
-import { errorMiddleware } from "@/server/lib/errorMiddleware";
+import {
+    forceAuthMiddleware,
+    type RequestContext,
+} from "@/server/lib/authMiddleware";
+import { BadRequestError, errorMiddleware } from "@/server/lib/errorMiddleware";
 import type { ExerciseWithRelations } from "@/server/model/ExerciseModel";
 import ExerciseService from "@/server/service/ExerciseService";
 
@@ -10,7 +13,10 @@ async function put_handler(
     { params }: { params: { id: string } },
 ) {
     const { id } = await params;
+    if (!id) throw new BadRequestError("Missing exercise ID parameter.");
     const exerciseID = parseInt(id, 10);
+    if (Number.isNaN(exerciseID))
+        throw new BadRequestError("Invalid exercise ID parameter.");
 
     const body = (await req.json()) as ExerciseWithRelations;
 
@@ -18,11 +24,7 @@ async function put_handler(
         exerciseID,
         body,
     );
-
-    return new Response(JSON.stringify(updatedExercise), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json(updatedExercise, { status: 200 });
 }
 
 async function get_handler(
@@ -31,17 +33,16 @@ async function get_handler(
 ) {
     const userID = user.id;
     const { id } = await params;
+    if (!id) throw new BadRequestError("Missing exercise ID parameter.");
     const exerciseID = parseInt(id, 10);
+    if (Number.isNaN(exerciseID))
+        throw new BadRequestError("Invalid exercise ID parameter.");
 
     const exercise = await ExerciseService.getUserStatForExercise(
         userID as unknown as string,
         exerciseID,
     );
-
-    return new Response(JSON.stringify(exercise), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json(exercise, { status: 200 });
 }
 
 export const PUT = errorMiddleware(

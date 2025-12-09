@@ -1,12 +1,9 @@
-import type { NextRequest } from "next/server";
-import prisma from "@/server/lib/prisma";
+import { type NextRequest, NextResponse } from "next/server";
+import { MuscleService } from "@/server/service/MuscleService";
 
 async function get_handler(req: NextRequest) {
-    const muscleGroups = await prisma.muscleGroup.findMany();
-    return new Response(JSON.stringify(muscleGroups), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-    });
+    const muscleGroups = await MuscleService.getAllMuscleGroups();
+    return NextResponse.json(muscleGroups, { status: 200 });
 }
 
 export const GET = get_handler;

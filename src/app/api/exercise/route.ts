@@ -1,39 +1,56 @@
-import type { NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
+import z from "zod";
 import { adminMiddleware } from "@/server/lib/adminMiddleware";
 import { forceAuthMiddleware } from "@/server/lib/authMiddleware";
-import { errorMiddleware } from "@/server/lib/errorMiddleware";
-import prisma from "@/server/lib/prisma";
-import {
-    ExerciseModel,
-    type ExerciseWithRelations,
-} from "@/server/model/ExerciseModel";
-import { ImageModel } from "@/server/model/ImageModel";
+import { BadRequestError, errorMiddleware } from "@/server/lib/errorMiddleware";
+import type { ExerciseWithRelations } from "@/server/model/ExerciseModel";
 import ExerciseService from "@/server/service/ExerciseService";
+
+const QuerySchema = z.object({
+    nameQuery: z.string().min(1).max(100).optional(),
+    muscleGroupIDs: z
+        .string()
+        .regex(/^(\d+,)*\d+$/)
+        .optional(),
+    equipmentIDs: z
+        .string()
+        .regex(/^(\d+,)*\d+$/)
+        .optional(),
+    page: z.string().regex(/^\d+$/).optional(),
+    pageSize: z.string().regex(/^\d+$/).optional(),
+});
 
 async function get_handler(req: NextRequest) {
     const { searchParams } = new URL(req.url);
-    const nameQuery = searchParams.get("nameQuery") || undefined;
-    const rawMuscleGroupIDs = searchParams
-        .get("muscleGroupIDs")
-        ?.split(",") as string[];
-    const rawEquipmentIDs = searchParams
-        .get("equipmentIDs")
-        ?.split(",") as string[];
-    const page = searchParams.get("page")
-        ? parseInt(searchParams.get("page") as string, 10)
-        : undefined;
-    const pageSize = searchParams.get("pageSize")
-        ? parseInt(searchParams.get("pageSize") as string, 10)
-        : undefined;
+    const parsed = QuerySchema.safeParse({
+        nameQuery: searchParams.get("nameQuery") ?? undefined,
+        muscleGroupIDs: searchParams.get("muscleGroupIDs") ?? undefined,
+        equipmentIDs: searchParams.get("equipmentIDs") ?? undefined,
+        page: searchParams.get("page") ?? undefined,
+        pageSize: searchParams.get("pageSize") ?? undefined,
+    });
 
-    const muscleGroupIDs = rawMuscleGroupIDs
-        ? rawMuscleGroupIDs.map((id) => parseInt(id, 10))
-        : undefined;
-    const equipmentIDs = rawEquipmentIDs
-        ? rawEquipmentIDs.map((id) => parseInt(id, 10))
-        : undefined;
+    if (!parsed.success)
+        throw new BadRequestError("Invalid input", parsed.error.flatten());
 
-    console.log("Fetching exercises with filters:", {
+    const {
+        muscleGroupIDs: muscleGroupIDsStr,
+        equipmentIDs: equipmentIDsStr,
+        page: pageStr,
+        pageSize: pageSizeStr,
+    } = parsed.data;
+
+    const nameQuery = parsed.data.nameQuery;
+    const muscleGroupIDs = muscleGroupIDsStr
+        ? muscleGroupIDsStr.split(",").map((s) => parseInt(s, 10))
+        : undefined;
+    const equipmentIDs = equipmentIDsStr
+        ? equipmentIDsStr.split(",").map((s) => parseInt(s, 10))
+        : undefined;
+    const page = pageStr ? parseInt(pageStr, 10) : undefined;
+    const pageSize = pageSizeStr ? parseInt(pageSizeStr, 10) : undefined;
+
+    const exercises = await ExerciseService.getAllExercises({
         nameQuery,
         muscleGroupIDs,
         equipmentIDs,
@@ -41,18 +58,7 @@ async function get_handler(req: NextRequest) {
         pageSize,
     });
 
-    const exercises = await ExerciseModel.getAllExercises({
-        nameQuery,
-        muscleGroupIDs,
-        equipmentIDs,
-        page,
-        pageSize,
-    });
-
-    return new Response(JSON.stringify(exercises), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json(exercises, { status: 200 });
 }
 
 async function post_handler(req: NextRequest) {
@@ -60,10 +66,7 @@ async function post_handler(req: NextRequest) {
 
     const createdExercise = await ExerciseService.createExercise(body);
 
-    return new Response(JSON.stringify(createdExercise), {
-        status: 201,
-        headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json(createdExercise, { status: 200 });
 }
 
 export const POST = errorMiddleware(

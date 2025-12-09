@@ -1,19 +1,41 @@
-import type { NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
+import z from "zod";
 import type { Workout } from "@/client/components/contexts/WorkoutContext";
-import { forceAuthMiddleware, type RequestContext } from "@/server/lib/authMiddleware";
-import { errorMiddleware, UnauthorizedError } from "@/server/lib/errorMiddleware";
+import {
+    forceAuthMiddleware,
+    type RequestContext,
+} from "@/server/lib/authMiddleware";
+import { BadRequestError, errorMiddleware } from "@/server/lib/errorMiddleware";
 import { UserService } from "@/server/service/UserService";
+
+const QuerySchema = z.object({
+    page: z.string().regex(/^\d+$/).optional(),
+    pageSize: z.string().regex(/^\d+$/).optional(),
+});
 
 async function get_handler(req: NextRequest, ctx: RequestContext) {
     const user = ctx.user;
 
-    const page = parseInt(req.nextUrl.searchParams.get("page") || "1", 10);
-    const pageSize = parseInt(
-        req.nextUrl.searchParams.get("pageSize") || "10",
-        10,
-    );
+    const { searchParams } = new URL(req.url);
+    const parsed = QuerySchema.safeParse({
+        page: searchParams.get("page") ?? undefined,
+        pageSize: searchParams.get("pageSize") ?? undefined,
+    });
 
-    const workouts = await UserService.getUserWorkouts(user.id as unknown as string, page, pageSize);
+    if (!parsed.success)
+        throw new BadRequestError("Invalid input", parsed.error.flatten());
+
+    const pageStr = parsed.data.page;
+    const pageSizeStr = parsed.data.pageSize;
+
+    const page = pageStr ? parseInt(pageStr, 10) : 0;
+    const pageSize = pageSizeStr ? parseInt(pageSizeStr, 10) : 20;
+
+    const workouts = await UserService.getUserWorkouts(
+        user.id as unknown as string,
+        page,
+        pageSize,
+    );
     const formatedWorkouts: Workout[] = workouts.map((workout) => ({
         id: workout.id,
         startTime: workout.startedAt,
@@ -32,10 +54,7 @@ async function get_handler(req: NextRequest, ctx: RequestContext) {
             })),
         })),
     }));
-    return new Response(JSON.stringify({ workouts: formatedWorkouts }), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json({ workouts: formatedWorkouts }, { status: 200 });
 }
 
 export const GET = errorMiddleware(forceAuthMiddleware(get_handler));

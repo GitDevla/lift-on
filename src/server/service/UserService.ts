@@ -24,4 +24,16 @@ export class UserService {
     ) {
         return UserModel.getWorkouts(userId, page, pageSize);
     }
+
+    static async findById(userId: string) {
+        return UserModel.findById(userId);
+    }
+
+    static async removeById(userId: string) {
+        return UserModel.deleteById(userId);
+    }
+
+    static async updateById(userId: string, data: Partial<{ username: string; email: string; password: string }>) {
+        return UserModel.updateById(userId, data);
+    }
 }

@@ -1,12 +1,9 @@
-import type { NextRequest } from "next/server";
-import prisma from "@/server/lib/prisma";
+import { type NextRequest, NextResponse } from "next/server";
+import { EquipmentService } from "@/server/service/EquipmentService";
 
 async function get_handler(req: NextRequest) {
-    const equipmentGroups = await prisma.equipment.findMany();
-    return new Response(JSON.stringify(equipmentGroups), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-    });
+    const equipmentGroups = await EquipmentService.getAllEquipment();
+    return NextResponse.json(equipmentGroups, { status: 200 });
 }
 
 export const GET = get_handler;

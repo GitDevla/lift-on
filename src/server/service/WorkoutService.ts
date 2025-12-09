@@ -64,4 +64,12 @@ export class WorkoutService {
 
         await WorkoutModel.deleteWorkout(workoutId);
     }
+
+    static async getWorkoutById(workoutId: number) {
+        const workout = await WorkoutModel.getWorkoutById(workoutId);
+        if (!workout) {
+            throw new NotFoundError("Workout not found");
+        }
+        return workout;
+    }
 }

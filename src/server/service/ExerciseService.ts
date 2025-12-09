@@ -108,4 +108,14 @@ export default class ExerciseService {
     ) {
         return ExerciseModel.lastPerformedByUser(exerciseId, userId);
     }
+
+    static async getAllExercises(query: Partial<{
+        nameQuery: string;
+        muscleGroupIDs: number[];
+        equipmentIDs: number[];
+        page: number;
+        pageSize: number;
+    }>,) {
+        return ExerciseModel.getAllExercises(query);
+    }
 }
