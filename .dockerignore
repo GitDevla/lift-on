@@ -47,3 +47,4 @@ dev.db
 public/images
 Dockerfile
 docker-compose.yml
+/.git
