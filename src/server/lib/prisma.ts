@@ -1,4 +1,5 @@
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import type { DefaultArgs } from "@prisma/client/runtime/wasm-compiler-edge";
 import dotenv from "dotenv";
 import { PrismaClient } from "@/server/generated/prisma/client";
 
@@ -26,3 +27,8 @@ const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
 export default prisma;
 
 if (process.env.NODE_ENV !== "production") globalThis.prismaGlobal = prisma;
+
+export type PrismaTransaction = Omit<
+    PrismaClient<never, undefined, DefaultArgs>,
+    "$connect" | "$disconnect" | "$on" | "$transaction" | "$extends"
+>;

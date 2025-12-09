@@ -1,5 +1,5 @@
 import type { SetType } from "@/server/generated/prisma/enums";
-import prisma from "@/server/lib/prisma";
+import prisma, { type PrismaTransaction } from "@/server/lib/prisma";
 
 export class WorkoutModel {
     static async create(userId: string) {
@@ -16,6 +16,30 @@ export class WorkoutModel {
         order: number,
     ) {
         return prisma.workoutExercise.upsert({
+            where: {
+                workoutId_exerciseId: {
+                    workoutId,
+                    exerciseId,
+                },
+            },
+            update: {
+                order,
+            },
+            create: {
+                workoutId,
+                exerciseId,
+                order,
+            },
+        });
+    }
+
+    static async upsertExerciseInWorkoutTx(
+        tx: PrismaTransaction,
+        workoutId: number,
+        exerciseId: number,
+        order: number,
+    ) {
+        return tx.workoutExercise.upsert({
             where: {
                 workoutId_exerciseId: {
                     workoutId,
@@ -68,6 +92,42 @@ export class WorkoutModel {
         });
     }
 
+    static async upsertSetInExerciseInWorkoutTx(
+        tx: PrismaTransaction,
+        workoutExerciseWorkoutId: number,
+        workoutExerciseExerciseId: number,
+        order: number,
+        reps: number,
+        weight: number,
+        type: SetType,
+        done: boolean,
+    ) {
+        return tx.set.upsert({
+            where: {
+                workoutExerciseWorkoutId_workoutExerciseExerciseId_order: {
+                    workoutExerciseWorkoutId,
+                    workoutExerciseExerciseId,
+                    order,
+                },
+            },
+            update: {
+                repetitions: reps,
+                weight,
+                type,
+                done,
+            },
+            create: {
+                workoutExerciseWorkoutId,
+                workoutExerciseExerciseId,
+                order,
+                repetitions: reps,
+                weight,
+                type,
+                done,
+            },
+        });
+    }
+
     static async getWorkoutById(id: number) {
         return prisma.workout.findUnique({
             where: { id },
@@ -84,6 +144,14 @@ export class WorkoutModel {
 
     static async clearWorkoutExercises(workoutId: number) {
         return prisma.workoutExercise.deleteMany({
+            where: { workoutId },
+        });
+    }
+    static async clearWorkoutExercisesTx(
+        tx: PrismaTransaction,
+        workoutId: number,
+    ) {
+        return tx.workoutExercise.deleteMany({
             where: { workoutId },
         });
     }
