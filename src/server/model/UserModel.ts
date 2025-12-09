@@ -57,4 +57,16 @@ export class UserModel {
             data,
         });
     }
+
+    static async getByEmail(email: string) {
+        return prisma.user.findUnique({
+            where: { email },
+        });
+    }
+
+    static async getByUsername(username: string) {
+        return prisma.user.findUnique({
+            where: { username },
+        });
+    }
 }

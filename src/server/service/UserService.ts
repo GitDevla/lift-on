@@ -34,6 +34,23 @@ export class UserService {
     }
 
     static async updateById(userId: string, data: Partial<{ username: string; email: string; password: string }>) {
+        const sameUsernameUser = data.username
+            ? await UserModel.findByUsername(data.username)
+            : null;
+        if (sameUsernameUser && sameUsernameUser.id !== userId) {
+            throw new ConflictError("Username already taken");
+        }
+
+        const sameEmailUser = data.email
+            ? await UserModel.findByEmail(data.email)
+            : null;
+        if (sameEmailUser && sameEmailUser.id !== userId) {
+            throw new ConflictError("Email already taken");
+        }
+
+        if (data.password) {
+            data.password = await HashService.hashPassword(data.password);
+        }
         return UserModel.updateById(userId, data);
     }
 }
