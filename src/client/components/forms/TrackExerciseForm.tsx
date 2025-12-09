@@ -14,6 +14,7 @@ import {
     SelectItem,
 } from "@/client/lib/heroui";
 import { SetType } from "@/server/generated/prisma/enums";
+import ImageWithFallback from "../atoms/ImageWithFallback";
 import { WorkoutContext } from "../contexts/WorkoutContext";
 import ConfirmationModal from "../modal/ConfirmationModal";
 
@@ -27,11 +28,11 @@ export default function TrackExerciseForm({ id }: { id: string }) {
         <div>
             <div key={exercise.id}>
                 <div className="flex items-center bg-content2 rounded-md p-2 px-10 gap-10 relative">
-                    <Image
+                    <ImageWithFallback
                         src={exercise.imageUrl}
                         alt={exercise.name}
-                        width={100}
-                        height={100}
+                        width={180}
+                        height={180}
                     />
                     <h3 className="capitalize text-lg">{exercise.name}</h3>
                     {workoutContext.readonly ? null : (
@@ -88,7 +89,7 @@ export default function TrackExerciseForm({ id }: { id: string }) {
                             key={set.id}
                             className={cn(
                                 "grid gap-3 items-center justify-items-center p-2  rounded-md relative",
-                                (set.done && !workoutContext.readonly) && "bg-green-500",
+                                set.done && !workoutContext.readonly && "bg-green-500",
                                 workoutContext.readonly ? "grid-cols-5" : "grid-cols-8",
                             )}
                         >

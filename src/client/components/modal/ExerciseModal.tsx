@@ -11,6 +11,7 @@ import {
     ModalHeader,
 } from "@/client/lib/heroui";
 import type { ExerciseWithRelations } from "@/server/model/ExerciseModel";
+import ImageWithFallback from "../atoms/ImageWithFallback";
 import { AuthContext } from "../contexts/AuthContext";
 import OneRepMaxGraph from "../graphs/oneRepMaxGraph";
 
@@ -97,7 +98,12 @@ export default function ExerciseModal({
                                 )}
                             </div>
                             <div className="w-full flex justify-center">
-                                <Image src={exercise.imageUrl as string} alt={exercise.name} />
+                                <ImageWithFallback
+                                    src={exercise.imageUrl as string}
+                                    alt={exercise.name}
+                                    width={180}
+                                    height={180}
+                                />
                             </div>
                             <ul className="mt-4 list-decimal pl-5 space-y-2">
                                 {exercise.description.split("\n").map((para, idx) => (
@@ -114,8 +120,8 @@ export default function ExerciseModal({
                                             <OneRepMaxGraph stats={userStats?.stats || []} />
                                         ) : (
                                             <div>
-                                                You need to log at least 2 sets of this exercise to
-                                                see your progress graph.
+                                                You need to log at least 2 sets of this exercise to see
+                                                your progress graph.
                                             </div>
                                         )}
                                     </div>
