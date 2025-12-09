@@ -166,7 +166,7 @@ export class ExerciseModel {
             JOIN 'Workout' w ON we.workoutId = w.id
             WHERE we.exerciseId = ${exerciseId} AND w.userId = ${userId}
             GROUP BY we.workoutId;
-        `;
+        `; // According to docs there is no SQL injection valnurability here
         return result;
     }
 }
