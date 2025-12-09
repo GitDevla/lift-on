@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lift-On
 
-## Getting Started
+Egy egyszerű edzésnaplózó webalkalmazás, "Webfejlesztés" tantárgy keretében készült projekt.
 
-First, run the development server:
+## Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Frontend:** Next.js 16, React 19, TypeScript
+- **UI:** HeroUI, Tailwind CSS
+- **Backend:** Next.js API Routes
+- **Adatbázis:** SQLite (Prisma ORM)
+- **Autentikáció:** JWT + bcrypt
+- **Validáció:** Zod
+- **Grafikonok:** Chart.js
+
+## Adatbázis Séma
+![database schema](./assets/schema.png)
+
+## Telepítés
+### Lokalis Fejlesztői Környezet
+
+#### Előfeltételek
+
+- Node.js v22.16.0 LTS vagy újabb
+- npm v11.4.2 vagy újabb
+
+#### Környezeti Változók
+
+Hozz létre egy `.env` fájlt a projekt gyökerében:
+
+```env
+DATABASE_URL="file:./db/dev.db"
+JWT_SECRET="your-secret-key-here"
+DYNAMIC_IMAGES_DIR="public/images/"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### Fejlesztői környezet
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Klónozd le a repót:
+```bash
+git clone https://github.com/GitDevla/lift-on.git
+cd lift-on
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Telepítsd a függőségeket:
+```bash
+npm install
+```
 
-## Learn More
+3. Állítsd be az adatbázist:
+```bash
+npx prisma generate
+npm run db:setup
+```
 
-To learn more about Next.js, take a look at the following resources:
+4. Indítsd el a fejlesztői szervert:
+```bash
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. Nyisd meg a böngészőt: [http://localhost:3000](http://localhost:3000)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Docker
 
-## Deploy on Vercel
+#### Docker Build
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+docker build -t lift-on:latest .
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+#### Docker Compose
+
+```bash
+docker compose up
+```
+
+Az alkalmazás elérhető lesz: [http://localhost:3000](http://localhost:3000)

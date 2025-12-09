@@ -9,6 +9,6 @@ services:
       - ./public:/app/public
     environment:
       - DATABASE_URL=file:./db/db.db
-      - JWT_SECRET=2Xbr3UUuqJaFDlXEwb9gP6VNJbAc90BQ
+      - JWT_SECRET=2Xbr3UUuqJaFDlXEwb9gP6VNJbAc90BQ # Change this to a strong secret in production
       - DYNAMIC_IMAGES_DIR=public/images/
     restart: unless-stopped
