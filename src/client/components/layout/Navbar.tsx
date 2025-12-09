@@ -28,6 +28,9 @@ export default function CustomNavbar() {
                 <NavbarItem>
                     <Link href="/exercises">Exercises</Link>
                 </NavbarItem>
+                <NavbarItem>
+                    <Link href="/settings">Settings</Link>
+                </NavbarItem>
             </NavbarContent>
 
             <NavbarContent as="div" className="items-center" justify="end">
