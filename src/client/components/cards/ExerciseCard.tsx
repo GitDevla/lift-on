@@ -40,7 +40,7 @@ export default function ExerciseCard({
                         alt={exercise.name}
                         height={180}
                         width={180}
-                        className="mt-2 rounded-md"
+                        className="mt-2 rounded-md size-[180px] object-contain"
                     />
                 </div>
                 <div className="flex justify-center w-3/4 @lg:w-full">
