@@ -66,6 +66,18 @@ export default function WorkoutProvider({
                 }
             }
 
+            for (const exercise of currentWorkout.exercises) {
+                if (exercise.sets.length === 0) {
+                    addToast({
+                        title: "Cannot End Workout",
+                        description:
+                            "Please ensure all exercises have at least one set before ending the workout.",
+                        color: "danger",
+                    });
+                    return;
+                }
+            }
+
             const updatedWorkout = {
                 ...currentWorkout,
                 endTime: editable === true ? currentWorkout.endTime : new Date(),
