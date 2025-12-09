@@ -238,13 +238,14 @@ export default function WorkoutProvider({
 
     useEffect(() => {
         const interval = setInterval(async () => {
+            if (editable === true) return;
             if (currentWorkout && !readonly) {
                 await WorkoutBackend.update(currentWorkout);
             }
         }, 10000);
 
         return () => clearInterval(interval);
-    }, [currentWorkout, readonly]);
+    }, [currentWorkout, readonly, editable]);
 
     useEffect(() => {
         if (data) {
