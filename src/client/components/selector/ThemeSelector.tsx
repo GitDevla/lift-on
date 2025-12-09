@@ -13,7 +13,7 @@ export const ThemeSwitcher = () => {
     if (!mounted) return null;
 
     return (
-        <Select className="max-w-xs" label="Theme" placeholder="Select a theme" selectedKeys={[theme!]} onSelectionChange={(keys) => setTheme(Array.from(keys)[0])}>
+        <Select className="max-w-xs" label="Theme" placeholder="Select a theme" selectedKeys={[theme!]} onSelectionChange={(keys) => setTheme(Array.from(keys)[0] as string)}>
             <SelectItem key="system">System</SelectItem>
             <SelectItem key="dark">Dark</SelectItem>
             <SelectItem key="light">Light</SelectItem>
