@@ -24,12 +24,10 @@ export default function CustomNavbar() {
                     </Link>
                 </NavbarBrand>
             </NavbarContent>
-            <NavbarContent>
-                <NavbarContent className="flex gap-6" as="div" justify="center">
-                    <NavbarItem>
-                        <Link href="/exercises">Exercises</Link>
-                    </NavbarItem>
-                </NavbarContent>
+            <NavbarContent className="flex justify-center " as="div" justify="center">
+                <NavbarItem>
+                    <Link href="/exercises">Exercises</Link>
+                </NavbarItem>
             </NavbarContent>
 
             <NavbarContent as="div" className="items-center" justify="end">
