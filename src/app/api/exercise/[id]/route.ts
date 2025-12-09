@@ -39,7 +39,7 @@ async function get_handler(
         throw new BadRequestError("Invalid exercise ID parameter.");
 
     const exercise = await ExerciseService.getUserStatForExercise(
-        userID as unknown as string,
+        userID,
         exerciseID,
     );
     return NextResponse.json(exercise, { status: 200 });

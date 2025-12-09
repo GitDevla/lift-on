@@ -12,9 +12,7 @@ import { WorkoutService } from "@/server/service/WorkoutService";
 
 async function post_handler(req: NextRequest, ctx: RequestContext) {
     const userID = ctx.user.id;
-    const newWorkout = await WorkoutService.startNewWorkout(
-        userID as unknown as string,
-    );
+    const newWorkout = await WorkoutService.startNewWorkout(userID);
     return NextResponse.json(
         { workout: newWorkout.workout, new: newWorkout.new },
         { status: 200 },

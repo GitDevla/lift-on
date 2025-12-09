@@ -5,7 +5,7 @@ import { UserService } from "@/server/service/UserService";
 
 async function get_handler(req: NextRequest, ctx: RequestContext) {
     const userID = ctx.user.id;
-    const user = await UserService.findById(userID as unknown as string);
+    const user = await UserService.findById(userID);
     if (!user)
         throw new NotFoundError("User not found");
 
@@ -22,18 +22,18 @@ async function get_handler(req: NextRequest, ctx: RequestContext) {
 
 async function delete_handler(req: NextRequest, ctx: RequestContext) {
     const userID = ctx.user.id;
-    await UserService.removeById(userID as unknown as string);
+    await UserService.removeById(userID);
     return NextResponse.json({ message: "User deleted successfully" });
 }
 
 async function patch_handler(req: NextRequest, ctx: RequestContext) {
     const userID = ctx.user.id;
     const body = await req.json();
-    const user = await UserService.findById(userID as unknown as string);
+    const user = await UserService.findById(userID);
     if (!user) {
         throw new NotFoundError("User not found");
     }
-    const updatedUser = await UserService.updateById(userID as unknown as string, body);
+    const updatedUser = await UserService.updateById(userID, body);
     const safeUser = {
         id: updatedUser.id,
         username: updatedUser.username,

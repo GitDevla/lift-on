@@ -32,7 +32,7 @@ async function get_handler(req: NextRequest, ctx: RequestContext) {
     const pageSize = pageSizeStr ? parseInt(pageSizeStr, 10) : 20;
 
     const workouts = await UserService.getUserWorkouts(
-        user.id as unknown as string,
+        user.id,
         page,
         pageSize,
     );

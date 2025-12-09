@@ -2,7 +2,7 @@ import jwt, { type Secret, type SignOptions } from "jsonwebtoken";
 import type { User } from "@/server/generated/prisma/client";
 
 interface CustomJwtPayload extends jwt.JwtPayload {
-    id: number;
+    id: string;
     role: string;
 }
 

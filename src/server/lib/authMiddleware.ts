@@ -32,7 +32,7 @@ export function forceAuthMiddleware(handler: Function) {
 
 export interface RequestContext {
     user: {
-        id: number;
+        id: string;
         role: string;
     };
 }
