@@ -3,6 +3,7 @@ import AuthBackend from "@/client/lib/backend/AuthBackend";
 import { addToast, Button, Divider, Form, Input } from "@/client/lib/heroui";
 import { updateUserSchema } from "@/validation/AuthSchema";
 import { AuthContext } from "../contexts/AuthContext";
+import HeroText from "../layout/HeroText";
 
 export default function EditUserForm() {
     const authContext = useContext(AuthContext);
@@ -59,49 +60,52 @@ export default function EditUserForm() {
     }
 
     return (
-        <Form
-            className="flex flex-col gap-4 max-w-md"
-            validationBehavior="aria"
-            validationErrors={errors}
-            onSubmit={onSubmit}
-        >
-            <Input
-                name="username"
-                label="Username"
-                labelPlacement="outside"
-                placeholder="Enter username"
-                variant="bordered"
-                defaultValue={authContext.user.username}
-            />
-            <Input
-                name="email"
-                label="Email"
-                labelPlacement="outside"
-                placeholder="Enter email"
-                variant="bordered"
-                type="email"
-                defaultValue={authContext.user.email}
-            />
-            <Divider className="my-2" />
-            <Input
-                name="newPassword"
-                label="New Password"
-                labelPlacement="outside"
-                placeholder="Enter new password"
-                variant="bordered"
-                type="password"
-            />
-            <Input
-                name="confirmPassword"
-                label="Confirm New Password"
-                labelPlacement="outside"
-                placeholder="Confirm new password"
-                variant="bordered"
-                type="password"
-            />
-            <Button type="submit" color="primary" size="lg" className="mt-2">
-                Save Changes
-            </Button>
-        </Form>
+        <>
+            <HeroText title="Edit User Information" subtitle="Update your account details" />
+            <Form
+                className="flex flex-col gap-4 max-w-md"
+                validationBehavior="aria"
+                validationErrors={errors}
+                onSubmit={onSubmit}
+            >
+                <Input
+                    name="username"
+                    label="Username"
+                    labelPlacement="outside"
+                    placeholder="Enter username"
+                    variant="bordered"
+                    defaultValue={authContext.user.username}
+                />
+                <Input
+                    name="email"
+                    label="Email"
+                    labelPlacement="outside"
+                    placeholder="Enter email"
+                    variant="bordered"
+                    type="email"
+                    defaultValue={authContext.user.email}
+                />
+                <Divider className="my-2" />
+                <Input
+                    name="newPassword"
+                    label="New Password"
+                    labelPlacement="outside"
+                    placeholder="Enter new password"
+                    variant="bordered"
+                    type="password"
+                />
+                <Input
+                    name="confirmPassword"
+                    label="Confirm New Password"
+                    labelPlacement="outside"
+                    placeholder="Confirm new password"
+                    variant="bordered"
+                    type="password"
+                />
+                <Button type="submit" color="primary" size="lg" className="mt-2">
+                    Save Changes
+                </Button>
+            </Form>
+        </>
     );
 }
