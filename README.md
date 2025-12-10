@@ -1,6 +1,7 @@
 # Lift-On
 
 Egy egyszerű edzésnaplózó webalkalmazás, "Webfejlesztés" tantárgy keretében készült projekt.
+A weboldal ideiglenesen, bemutató ereéig elérhető a https://lifton.devla.dev/ címen.
 
 ## Tech Stack
 
